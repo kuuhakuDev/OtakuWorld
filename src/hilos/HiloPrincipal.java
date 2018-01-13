@@ -2,7 +2,7 @@ package hilos;
 
 import gui.VentanaPrincipal;
 
-public class Principal {
+public class HiloPrincipal {
 
 	public static void main(String[] args) {
 		
