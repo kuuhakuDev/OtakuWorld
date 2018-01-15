@@ -6,15 +6,16 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.border.EmptyBorder;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-import javax.swing.border.EmptyBorder;
-
-public class VentanaPrincipal extends JFrame{
+public class VentanaPrincipal extends JFrame implements ActionListener{
 
 	/**
 	 * 
@@ -49,10 +50,13 @@ public class VentanaPrincipal extends JFrame{
 		
 		anime = new JButton("Anime");
 		anime.setPreferredSize(size);
+		anime.addActionListener(this);
 		manga = new JButton("Manga");
 		manga.setPreferredSize(size);
+		manga.addActionListener(this);
 		noticias = new JButton("Noticias");
 		noticias.setPreferredSize(size);
+		noticias.addActionListener(this);
 		panelCentral = new JPanel(new FlowLayout(FlowLayout.CENTER, 100, 30));
 		
 		panelCentral.add(anime);
@@ -71,5 +75,20 @@ public class VentanaPrincipal extends JFrame{
 		panelNorte.add(otakuWorld);
 		add(panelNorte, BorderLayout.NORTH);
 		
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		if(e.getSource().equals(anime)) {
+			VentanaAnime.getInstans();
+			System.out.println("Anime");
+		}
+		else if(e.getSource().equals(manga)) {
+			System.out.println("Manga");			
+		}
+		else if(e.getSource().equals(noticias)) {
+			System.out.println("Noticias");			
+		}
 	}
 }
