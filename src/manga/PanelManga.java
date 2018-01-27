@@ -1,14 +1,19 @@
-package gui;
+package manga;
 
-import javax.swing.ImageIcon;
-import javax.swing.JPanel;
-import java.awt.FlowLayout;
 import java.awt.Dimension;
-import java.util.List;
+import java.awt.FlowLayout;
 import java.util.ArrayList;
-import algoritmos.Busqueda;
+import java.util.List;
 
-public class PanelAnime extends JPanel{
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
+import algoritmos.Busqueda;
+import gui.VentanaAnime;
+import gui.ViewAnime;
+import values.ValuesStrings;
+
+public class PanelManga extends JPanel{
 
 	/**
 	 * 
@@ -17,8 +22,8 @@ public class PanelAnime extends JPanel{
 	private List<ViewAnime> lista = new ArrayList<ViewAnime>();
 	private int x;
 	private int ancho = 50, largo= 50;
-
-	public PanelAnime(VentanaAnime ventana) {
+	
+	public PanelManga(VentanaManga ventana) {
 		
 		setLayout(new FlowLayout(FlowLayout.CENTER, ancho, largo));
 		listaAnime();
@@ -27,8 +32,9 @@ public class PanelAnime extends JPanel{
 	}
 	
 	private void listaAnime() {
+		
 		Busqueda b = new Busqueda();
-		ViewAnime[] anime = b.buscarTodo("");
+		ViewAnime[] anime = b.buscarTodo(ValuesStrings.leoManga);
 		
 		for(int i = 0; i < anime.length; i++) {
 			//lista.add(new ViewAnime("Naruto", "", "",new ImageIcon(getClass().getResource("/image/minato.jpg")).getImage()));
@@ -38,17 +44,18 @@ public class PanelAnime extends JPanel{
 		for(int i = 0; i < anime.length; i++) {
 			add(lista.get(i));
 		}
+		
 	}
 	
 //	Falta arreglar el bug para cuando tenemos menos de 6 elemenatos
-	protected void size(VentanaAnime ventana) {
+	protected void size(JFrame ventana) {
 		int sizeX = -6;
 		int sizeY = largo;
 		boolean entrar = true;
 		int i;
 		int ventanax = ventana.getSize().width;
-		int viewX = lista.get(1).getPreferredSize().width + ancho;
-		int viewY = lista.get(1).getPreferredSize().height + largo;
+		int viewX = lista.get(0).getPreferredSize().width + ancho;
+		int viewY = lista.get(0).getPreferredSize().height + largo;
 		for(i = 0; i < lista.size() && entrar; i++) {
 			sizeX += viewX;
 			if(ventanax-40 < sizeX) {
@@ -72,5 +79,5 @@ public class PanelAnime extends JPanel{
 			x = i;
 		}
 	}
-	
+
 }

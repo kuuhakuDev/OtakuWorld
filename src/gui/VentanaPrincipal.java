@@ -8,6 +8,8 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.border.EmptyBorder;
 
+import manga.VentanaManga;
+
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -51,17 +53,23 @@ public class VentanaPrincipal extends JFrame implements ActionListener{
 		anime = new JButton("Anime");
 		anime.setPreferredSize(size);
 		anime.addActionListener(this);
+		anime.setEnabled(false);
+		
 		manga = new JButton("Manga");
 		manga.setPreferredSize(size);
 		manga.addActionListener(this);
+		
 		noticias = new JButton("Noticias");
 		noticias.setPreferredSize(size);
 		noticias.addActionListener(this);
+		noticias.setEnabled(false);
+		
 		panelCentral = new JPanel(new FlowLayout(FlowLayout.CENTER, 100, 30));
 		
 		panelCentral.add(anime);
 		panelCentral.add(manga);
 		panelCentral.add(noticias);
+		
 		add(panelCentral, BorderLayout.CENTER);
 		
 	}
@@ -85,7 +93,8 @@ public class VentanaPrincipal extends JFrame implements ActionListener{
 			System.out.println("Anime");
 		}
 		else if(e.getSource().equals(manga)) {
-			System.out.println("Manga");			
+			System.out.println("Manga");
+			VentanaManga.getInstans();
 		}
 		else if(e.getSource().equals(noticias)) {
 			System.out.println("Noticias");			
