@@ -4,33 +4,40 @@ import java.util.List;
 import java.awt.Image;
 import java.util.ArrayList;
 import red.Conexion;
-import gui.ViewAnime;
+import values.ValuesStrings;
+import gui.PanelView;
 
 public class Busqueda {
 	private Conexion c;
 	private String[] codigo;
-	private String fin = "</ul>";
-	private String inicio = "class=\"list-inline reset-floats\"";
-	private String titulo = "class=\"title-dirmanga\"";
-	private String detalles = "class=\"man-descdir\"";
-	private String imagen = "img data-original";
+	private String fin;
+	private String inicio;
+	private String titulo;
+	private String detalles;
+	private String imagen;
 	
-	public Busqueda(){
+	public Busqueda(String inicio, String fin, String titulo, String detalles, String imagen){
 		c = new Conexion();
+		
+		this.inicio = inicio;
+		this.fin = fin;
+		this.titulo = titulo;
+		this.detalles = detalles;
+		this.imagen = imagen;
 	}
 	
 	
 	
-	public ViewAnime[] buscarTodo(String url){
+	public PanelView[] buscarTodo(String url){
 		codigo = c.codigoFuente(url);
 		String[] nombres = getTitulo();
 		String[] detalles = getDetalles();
 		String[] urls = getURL();
 		Image[] imagenes = getImagenes();
-		ViewAnime[] listado = new ViewAnime[nombres.length];
+		PanelView[] listado = new PanelView[nombres.length];
 		
 		for(int i = 0; i < nombres.length; i++){
-			listado[i] = new ViewAnime(nombres[i], detalles[i], urls[i], imagenes[i]);
+			listado[i] = new PanelView(nombres[i], detalles[i], urls[i], imagenes[i]);
 			listado[i].getString();
 		}
 		
@@ -46,8 +53,7 @@ public class Busqueda {
 	private String[] getTitulo(){
 		
 		String[] lineas = buscarLinea(this.titulo, inicio, fin, 1);
-		String[] contenido = lineas;
-		//String[] contenido = etiquetas(lineas, "Title", 0);
+		String[] contenido = extraerTexto(ValuesStrings.NADA, lineas, titulo, 0);
 		
 		return contenido;
 	}
@@ -55,15 +61,15 @@ public class Busqueda {
 	private String[] getURL(){
 		
 		String[] lineas = buscarLinea("href", inicio, fin, 0);
-		String[] contenido = etiquetas(lineas, "href", 0);
+		String[] contenido = extraerTexto(ValuesStrings.ETIQUETAS, lineas, "href", 0);
 		
 		return contenido;
 	}
 	
 	private String[] getDetalles(){
 		
-		String[] lineas = buscarLinea(this.titulo, inicio, fin, 1);
-		String[] contenido = lineas;
+		String[] lineas = buscarLinea(detalles, inicio, fin, 1);
+		String[] contenido = extraerTexto(ValuesStrings.NADA, lineas, detalles, 0);
 		//String[] contenido = etiquetas(lineas, "Title", 0);
 		
 		return contenido;
@@ -72,7 +78,7 @@ public class Busqueda {
 	private Image[] getImagenes(){
 		
 		String[] lineas = buscarLinea(this.imagen, inicio, fin, 0);
-		String[] contenido = comillas(lineas, "data-original=", 0);
+		String[] contenido = extraerTexto(ValuesStrings.COMILLAS, lineas, imagen, 0);
 		
 		Image[] imagenes = c.descargar(contenido);
 		
@@ -85,20 +91,7 @@ public class Busqueda {
 	 * 			Buscadores
 	 * *******************************
 	 */
-	
-	private String[] buscarLinea(String texto){
-		List<String> lista = new ArrayList<String>();
-		for(int i = 0; i < codigo.length; i++){
-			if(codigo[i].indexOf(texto) != -1){
-				lista.add(codigo[i]);
-				//System.out.println(codigo[i]);
-			}
-		}
-		
-		String[] str = listAString(lista);
-		
-		return str;
-	}
+
 	
 	private String[] buscarLinea(String texto, String inicio, String fin, int salto){
 		boolean entrar = false;
@@ -173,5 +166,28 @@ public class Busqueda {
 		return str;
 	}
 	
+	
+	private String[] extraerTexto(String texto, String[] lineas, String ref, int index) {
+		if(texto.equals(ValuesStrings.COMILLAS)) {
+			return comillas(lineas, ref, index);
+		}
+		else if(texto.equals(ValuesStrings.ETIQUETAS)) {
+			return etiquetas(lineas, ref, index);
+		}
+		else {
+			return lineas;
+		}
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
 

@@ -9,8 +9,6 @@ import java.awt.event.ComponentListener;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 
-import gui.PanelAnime;
-
 public class VentanaManga extends JFrame implements ComponentListener{
 
 	/**

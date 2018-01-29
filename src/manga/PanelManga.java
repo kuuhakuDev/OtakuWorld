@@ -9,8 +9,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import algoritmos.Busqueda;
-import gui.VentanaAnime;
-import gui.ViewAnime;
+import gui.PanelView;
 import values.ValuesStrings;
 
 public class PanelManga extends JPanel{
@@ -19,7 +18,7 @@ public class PanelManga extends JPanel{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private List<ViewAnime> lista = new ArrayList<ViewAnime>();
+	private List<PanelView> lista = new ArrayList<PanelView>();
 	private int x;
 	private int ancho = 50, largo= 50;
 	
@@ -32,9 +31,14 @@ public class PanelManga extends JPanel{
 	}
 	
 	private void listaAnime() {
+		String inicio = ValuesStrings.INICIO_MANGA;
+		String fin = ValuesStrings.FIN_MANGA;
+		String titulo = ValuesStrings.TITULO_MANGA;
+		String detalles = ValuesStrings.DETALLES_MANGA;
+		String portada = ValuesStrings.PORTADA_MANGA;
 		
-		Busqueda b = new Busqueda();
-		ViewAnime[] anime = b.buscarTodo(ValuesStrings.leoManga);
+		Busqueda b = new Busqueda(inicio, fin, titulo, detalles, portada);
+		PanelView[] anime = b.buscarTodo(ValuesStrings.LEO_MANGA);
 		
 		for(int i = 0; i < anime.length; i++) {
 			//lista.add(new ViewAnime("Naruto", "", "",new ImageIcon(getClass().getResource("/image/minato.jpg")).getImage()));
