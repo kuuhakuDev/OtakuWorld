@@ -2,6 +2,7 @@ package gui;
 
 import javax.swing.JPanel;
 import javax.swing.ImageIcon;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 import java.awt.Dimension;
@@ -11,6 +12,9 @@ import java.awt.FlowLayout;
 
 import javax.swing.border.LineBorder;
 import javax.swing.border.MatteBorder;
+
+import values.ValuesStrings;
+
 import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -36,15 +40,17 @@ public class PanelView extends JPanel implements MouseListener{
 	private String detalle;
 	private String url;
 	private Image img;
+	private JFrame modal;
 	
 		
 	
-	public PanelView(String titulo, String detalle, String url, Image img) {
+	public PanelView(JFrame modal, String titulo, String detalle, String url, Image img) {
 		
 		this.titulo = titulo;
 		this.detalle = detalle;
 		this.url = url;
 		this.img = img;
+		this.modal = modal;
 		
 		setLayout(new BorderLayout());
 		setBorder(bordeOut);
@@ -60,7 +66,7 @@ public class PanelView extends JPanel implements MouseListener{
 		imagen.setPreferredSize(sizeImage);
 		add(imagen, BorderLayout.NORTH);
 		
-		jNombre = new JLabel(titulo);
+		jNombre = new JLabel("<html>" + titulo + "</html>");
 		panelLabel.add(jNombre);
 		
 		add(panelLabel, BorderLayout.CENTER);
@@ -118,7 +124,8 @@ public class PanelView extends JPanel implements MouseListener{
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
 		// TODO Auto-generated method stub
-		
+		System.out.println(getString());
+		new JDialogContenido(modal, ValuesStrings.LEO_MANGA+url, img);
 	}
 
 	@Override

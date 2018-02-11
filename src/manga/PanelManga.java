@@ -21,11 +21,13 @@ public class PanelManga extends JPanel{
 	private List<PanelView> lista = new ArrayList<PanelView>();
 	private int x;
 	private int ancho = 50, largo= 50;
+	private VentanaManga ventana;
 	
 	public PanelManga(VentanaManga ventana) {
 		
 		setLayout(new FlowLayout(FlowLayout.CENTER, ancho, largo));
 		listaAnime();
+		this.ventana = ventana;
 		size(ventana);
 		
 	}
@@ -34,11 +36,12 @@ public class PanelManga extends JPanel{
 		String inicio = ValuesStrings.INICIO_MANGA;
 		String fin = ValuesStrings.FIN_MANGA;
 		String titulo = ValuesStrings.TITULO_MANGA;
+		String url = ValuesStrings.URL_MANGA;
 		String detalles = ValuesStrings.DETALLES_MANGA;
 		String portada = ValuesStrings.PORTADA_MANGA;
 		
-		Busqueda b = new Busqueda(inicio, fin, titulo, detalles, portada);
-		PanelView[] anime = b.buscarTodo(ValuesStrings.LEO_MANGA);
+		Busqueda b = new Busqueda(inicio, fin, titulo, url, detalles, portada);
+		PanelView[] anime = b.buscarTodo(ventana, ValuesStrings.LEO_MANGA_DIR);
 		
 		for(int i = 0; i < anime.length; i++) {
 			//lista.add(new ViewAnime("Naruto", "", "",new ImageIcon(getClass().getResource("/image/minato.jpg")).getImage()));

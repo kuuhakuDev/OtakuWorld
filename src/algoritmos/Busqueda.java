@@ -1,6 +1,9 @@
 package algoritmos;
 
 import java.util.List;
+
+import javax.swing.JFrame;
+
 import java.awt.Image;
 import java.util.ArrayList;
 import red.Conexion;
@@ -13,22 +16,36 @@ public class Busqueda {
 	private String fin;
 	private String inicio;
 	private String titulo;
+	private String url;
 	private String detalles;
 	private String imagen;
 	
-	public Busqueda(String inicio, String fin, String titulo, String detalles, String imagen){
+	public Busqueda(String inicio, String fin, String titulo, String url, String detalles, String imagen){
 		c = new Conexion();
 		
 		this.inicio = inicio;
 		this.fin = fin;
 		this.titulo = titulo;
+		this.url = url;
 		this.detalles = detalles;
 		this.imagen = imagen;
 	}
 	
+	public Busqueda(String inicio, String fin, String detalles) {
+		c = new Conexion();
+		
+		this.detalles = detalles;
+		this.inicio = inicio;
+		this.fin = fin;
+	}
+	
+	public Busqueda() {
+		
+	}
 	
 	
-	public PanelView[] buscarTodo(String url){
+	
+	public PanelView[] buscarTodo(JFrame modal, String url){
 		codigo = c.codigoFuente(url);
 		String[] nombres = getTitulo();
 		String[] detalles = getDetalles();
@@ -37,11 +54,16 @@ public class Busqueda {
 		PanelView[] listado = new PanelView[nombres.length];
 		
 		for(int i = 0; i < nombres.length; i++){
-			listado[i] = new PanelView(nombres[i], detalles[i], urls[i], imagenes[i]);
+			listado[i] = new PanelView(modal, nombres[i], detalles[i], urls[i], imagenes[i]);
 			listado[i].getString();
 		}
 		
 		return listado;
+	}
+	
+	public String buscarTodo (String url) {
+		codigo = c.codigoFuente(url);
+		return getDetalles()[0];
 	}
 	
 	/*
@@ -52,7 +74,7 @@ public class Busqueda {
 	
 	private String[] getTitulo(){
 		
-		String[] lineas = buscarLinea(this.titulo, inicio, fin, 1);
+		String[] lineas = buscarLinea(codigo, this.titulo, inicio, fin, 1);
 		String[] contenido = extraerTexto(ValuesStrings.NADA, lineas, titulo, 0);
 		
 		return contenido;
@@ -60,15 +82,15 @@ public class Busqueda {
 	
 	private String[] getURL(){
 		
-		String[] lineas = buscarLinea("href", inicio, fin, 0);
-		String[] contenido = extraerTexto(ValuesStrings.ETIQUETAS, lineas, "href", 0);
+		String[] lineas = buscarLinea(codigo, "href", inicio, fin, 0);
+		String[] contenido = extraerTexto(ValuesStrings.COMILLAS, lineas, "href", 0);
 		
 		return contenido;
 	}
 	
 	private String[] getDetalles(){
 		
-		String[] lineas = buscarLinea(detalles, inicio, fin, 1);
+		String[] lineas = buscarLinea(codigo, detalles, inicio, fin, 1);
 		String[] contenido = extraerTexto(ValuesStrings.NADA, lineas, detalles, 0);
 		//String[] contenido = etiquetas(lineas, "Title", 0);
 		
@@ -77,7 +99,7 @@ public class Busqueda {
 	
 	private Image[] getImagenes(){
 		
-		String[] lineas = buscarLinea(this.imagen, inicio, fin, 0);
+		String[] lineas = buscarLinea(codigo, this.imagen, inicio, fin, 0);
 		String[] contenido = extraerTexto(ValuesStrings.COMILLAS, lineas, imagen, 0);
 		
 		Image[] imagenes = c.descargar(contenido);
@@ -93,7 +115,7 @@ public class Busqueda {
 	 */
 
 	
-	private String[] buscarLinea(String texto, String inicio, String fin, int salto){
+	protected String[] buscarLinea(String[] codigo, String texto, String inicio, String fin, int salto){
 		boolean entrar = false;
 		boolean bucle = true;
 		List<String> lista = new ArrayList<String>();
@@ -120,7 +142,7 @@ public class Busqueda {
 		return str;
 	}
 	
-	private String[] comillas(String[] param, String ref, int index){
+	protected String[] comillas(String[] param, String ref, int index){
 		String[] lista = new String[param.length];
 		
 		for(int i = 0; i < param.length; i++){
@@ -138,7 +160,7 @@ public class Busqueda {
 		return lista;
 	}
 	
-	private String[] etiquetas(String[] param, String ref, int index){
+	protected String[] etiquetas(String[] param, String ref, int index){
 		String[] lista = new String[param.length];
 		
 		for(int i = 0; i < param.length; i++){
@@ -158,7 +180,7 @@ public class Busqueda {
 		return lista;
 	}
 	
-	private String[] listAString(List<String> lista){
+	protected String[] listAString(List<String> lista){
 		String[] str = new String[lista.size()];
 		for(int i = 0; i < lista.size(); i++){
 			str[i] = lista.get(i);
@@ -167,7 +189,7 @@ public class Busqueda {
 	}
 	
 	
-	private String[] extraerTexto(String texto, String[] lineas, String ref, int index) {
+	protected String[] extraerTexto(String texto, String[] lineas, String ref, int index) {
 		if(texto.equals(ValuesStrings.COMILLAS)) {
 			return comillas(lineas, ref, index);
 		}
