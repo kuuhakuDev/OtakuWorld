@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import red.Conexion;
 import values.ValuesStrings;
 import gui.PanelView;
+import recursos.Listado;
 
 public class Busqueda {
 	private Conexion c;
@@ -45,20 +46,31 @@ public class Busqueda {
 	
 	
 	
-	public PanelView[] buscarTodo(JFrame modal, String url){
+	public Listado[] buscarTodo(JFrame modal, String url){
 		codigo = c.codigoFuente(url);
 		String[] nombres = getTitulo();
 		String[] detalles = getDetalles();
 		String[] urls = getURL();
 		Image[] imagenes = getImagenes();
-		PanelView[] listado = new PanelView[nombres.length];
+		
+		Listado[] lista = new Listado[nombres.length];
+		
+		for(int i = 0; i < nombres.length; i++) {
+			lista[i] = new Listado();
+			lista[i].setTitulo(nombres[i]);
+			lista[i].setDetalleCorto(detalles[i]);
+			lista[i].setUrl(urls[i]);
+			lista[i].setImg(imagenes[i]);
+		}
+		
+		/*PanelView[] listado = new PanelView[nombres.length];
 		
 		for(int i = 0; i < nombres.length; i++){
 			listado[i] = new PanelView(modal, nombres[i], detalles[i], urls[i], imagenes[i]);
 			listado[i].getString();
-		}
+		}*/
 		
-		return listado;
+		return lista;
 	}
 	
 	public String buscarTodo (String url) {

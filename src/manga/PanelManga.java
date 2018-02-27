@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 
 import algoritmos.Busqueda;
 import gui.PanelView;
+import recursos.Listado;
 import values.ValuesStrings;
 
 public class PanelManga extends JPanel{
@@ -41,15 +42,21 @@ public class PanelManga extends JPanel{
 		String portada = ValuesStrings.PORTADA_MANGA;
 		
 		Busqueda b = new Busqueda(inicio, fin, titulo, url, detalles, portada);
-		PanelView[] anime = b.buscarTodo(ventana, ValuesStrings.LEO_MANGA_DIR);
+		Listado[] lista = b.buscarTodo(null, ValuesStrings.LEO_MANGA_DIR);
+		
+		PanelView[] anime = new PanelView[lista.length];
 		
 		for(int i = 0; i < anime.length; i++) {
-			//lista.add(new ViewAnime("Naruto", "", "",new ImageIcon(getClass().getResource("/image/minato.jpg")).getImage()));
-			lista.add(anime[i]);
+			anime[i] = new PanelView(ventana,lista[i]);
 		}
 		
 		for(int i = 0; i < anime.length; i++) {
-			add(lista.get(i));
+			//lista.add(new ViewAnime("Naruto", "", "",new ImageIcon(getClass().getResource("/image/minato.jpg")).getImage()));
+			this.lista.add(anime[i]);
+		}
+		
+		for(int i = 0; i < anime.length; i++) {
+			add(this.lista.get(i));
 		}
 		
 	}

@@ -2,6 +2,7 @@ package algoritmos;
 
 import java.util.List;
 
+import recursos.Listado;
 import red.Conexion;
 import values.ValuesStrings;
 
@@ -23,32 +24,30 @@ public class BusquedaContenidoManga extends Busqueda{
 	private String[] codigo;
 	
 	private String detalle;
-	private List<String[]> lista = new ArrayList<String[]>();
-	private Object[] contenido = new Object[3];
+	private List<String[]> contenido = new ArrayList<String[]>();
 	
 	
-	public Object[] BuscarContenido(String link) {
+	public Listado BuscarContenido(String link, Listado lista) {
 		
 		codigo = c.codigoFuente(link);
 		
-		getDetalles();
-		getLista();
+		getDetalles(lista);
+		getContenido(lista);
 		
-		contenido[0] = detalle;
-		contenido[1] = lista;
 		
-		return contenido;
+		
+		return lista;
 	}
 	
-	private void getDetalles(){
+	private void getDetalles(Listado lista){
 		
 		String[] lineas = buscarLinea(codigo, DETALLE_CONTENIDO_MANGA, detallesIni, detallesFin, 1);
-		detalle = extraerTexto(ValuesStrings.NADA, lineas, DETALLE_CONTENIDO_MANGA, 0)[0];
+		lista.setDetalle(extraerTexto(ValuesStrings.NADA, lineas, DETALLE_CONTENIDO_MANGA, 0)[0]);
 		
 	}
 
 	
-	private List<String[]> getLista() {
+	private void getContenido(Listado lista) {
 		
 			String[] lineas = buscarLinea(codigo, LISTA_CONTENIDO_MANGA, listaIni, listaFin, 0);
 			String[] cap = extraerTexto(ValuesStrings.ETIQUETAS, lineas, CAPITULO_LISTA_MANGA, 0);
@@ -56,13 +55,9 @@ public class BusquedaContenidoManga extends Busqueda{
 			String[] fecha = extraerTexto(ValuesStrings.ETIQUETAS, lineas, FECHA_LISTA_MANGA, 0);
 			
 			for(int i = 0; i < cap.length; i++) {
-				String[] aux = new String[3];
-				aux [0] = cap[i];
-				aux [1] = nombre[i];
-				aux [2] = fecha[i];
-				lista.add(aux);
+				lista.addCapNumero(cap[i]);
+				lista.addCapNombre(nombre[i]);
+				lista.addCapFecha(fecha[i]);
 			}
-		
-		return lista;
 	}
 }

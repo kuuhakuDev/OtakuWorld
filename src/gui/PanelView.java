@@ -13,6 +13,7 @@ import java.awt.FlowLayout;
 import javax.swing.border.LineBorder;
 import javax.swing.border.MatteBorder;
 
+import recursos.Listado;
 import values.ValuesStrings;
 
 import java.awt.Color;
@@ -40,16 +41,19 @@ public class PanelView extends JPanel implements MouseListener{
 	private String detalle;
 	private String url;
 	private Image img;
+	private Listado lista;
 	private JFrame modal;
 	
 		
 	
-	public PanelView(JFrame modal, String titulo, String detalle, String url, Image img) {
+	public PanelView(JFrame modal,Listado lista) {
 		
-		this.titulo = titulo;
-		this.detalle = detalle;
-		this.url = url;
-		this.img = img;
+		
+		this.lista = lista;
+		this.titulo = lista.getTitulo();
+		this.detalle = lista.getDetalleCorto();
+		this.url = lista.getUrl();
+		this.img = lista.getImg();
 		this.modal = modal;
 		
 		setLayout(new BorderLayout());
@@ -78,6 +82,9 @@ public class PanelView extends JPanel implements MouseListener{
 	 * Setters and Getters 
 	 * 
 	 */
+	protected Listado getLista() {
+		return lista;
+	}
 	
 	protected String getTitulo() {
 		return titulo;
@@ -125,7 +132,7 @@ public class PanelView extends JPanel implements MouseListener{
 	public void mouseClicked(MouseEvent arg0) {
 		// TODO Auto-generated method stub
 		System.out.println(getString());
-		new JDialogContenido(modal, ValuesStrings.LEO_MANGA+url, img);
+		new JDialogContenido(modal, lista);
 	}
 
 	@Override

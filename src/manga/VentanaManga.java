@@ -48,6 +48,7 @@ public class VentanaManga extends JFrame implements ComponentListener{
 	
 	private void centro() {
 		panelManga = new PanelManga(this);
+		scroll.getVerticalScrollBar().setUnitIncrement(20);
 		scroll.getViewport().add(panelManga);
 		add(scroll, BorderLayout.CENTER);
 	}
