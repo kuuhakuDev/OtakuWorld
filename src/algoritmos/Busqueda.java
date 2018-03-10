@@ -135,15 +135,12 @@ public class Busqueda {
 		for(int i = 0; i < codigo.length && bucle; i++){
 			if(codigo[i].indexOf(inicio) != -1) {
 				entrar = true;
-				System.out.println("Inicio Encontrado");
 			}else if(codigo[i].indexOf(fin) != -1 && entrar) {
 				bucle = false;
-				System.out.println("Bucle finalizado en linea = " + i);
 			}
 			if(entrar) {
 				if(codigo[i].indexOf(texto) != -1){
 					lista.add(codigo[i+salto]);
-					System.out.println(codigo[i+salto]);
 				}
 			}
 			
@@ -179,7 +176,6 @@ public class Busqueda {
 			int x = 0;
 			lista[i] = "";
 			for(int j = param[i].indexOf(ref); j < param[i].length() && x !=2; j++){
-				System.out.print(param[i].charAt(j));
 				if(param[i].charAt(j) == '<' || param[i].charAt(j) == '>'){
 					x++;
 				}

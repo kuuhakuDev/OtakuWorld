@@ -32,7 +32,6 @@ public class RenderLista extends JPanel implements ListCellRenderer<Aux>{
 	private JLabel fecha = new JLabel();
 	private JPanel panel1 = new JPanel();
 	private JPanel panel2 = new JPanel();
-	private JButton button = new JButton();
 
 	private Font fontTitulo = new Font("Times New Roman", Font.BOLD, 18);
 	private Font fontDescripcion = new Font("Times New Roman", Font.PLAIN, 15);
@@ -43,9 +42,8 @@ public class RenderLista extends JPanel implements ListCellRenderer<Aux>{
 		panel2.setLayout(new FlowLayout(FlowLayout.RIGHT));
 		panel1.add(numero);
 		panel1.add(nombre);
-		panel1.add(fecha);
 		
-		panel2.add(button);
+		panel2.add(fecha);
 		
 		add(panel1,BorderLayout.WEST);
 		add(panel2,BorderLayout.EAST);
@@ -53,7 +51,7 @@ public class RenderLista extends JPanel implements ListCellRenderer<Aux>{
 		//add(panel);
 	}
 	
-	public Component getListCellRendererComponent(JList<? extends Aux> list, Listado value, int index,
+	/*public Component getListCellRendererComponent(JList<? extends Aux> list, Listado value, int index,
 			boolean isSelected, boolean cellHasFocus) {
 		// TODO Auto-generated method stub
 		
@@ -90,7 +88,7 @@ public class RenderLista extends JPanel implements ListCellRenderer<Aux>{
 	        }
 		
 		return this;
-	}
+	}*/
 
 	@Override
 	public Component getListCellRendererComponent(JList<? extends Aux> list, Aux value, int index, 

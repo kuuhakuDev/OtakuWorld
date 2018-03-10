@@ -5,6 +5,8 @@ import javax.swing.JDialog;
 import javax.swing.ImageIcon;
 import java.awt.Image;
 import java.awt.ScrollPane;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.List;
@@ -12,6 +14,8 @@ import java.util.List;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JButton;
+import javax.swing.JTextField;
 import javax.swing.JScrollPane;
 
 import algoritmos.Busqueda;
@@ -27,92 +31,114 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 
+import javax.swing.border.BevelBorder;
+import javax.swing.border.SoftBevelBorder;
 
-public class JDialogContenido extends JDialog implements MouseListener{
+
+public class JDialogContenido extends JDialog implements MouseListener, ActionListener{
 
 	/**
-	 * 
+	 * Atributos de la Clase
 	 */
 	private static final long serialVersionUID = 1L;
 	private JPanel panelIz = new JPanel();
 	private JPanel panelCen = new JPanel(new BorderLayout());
 	private JPanel panelDetalle = new JPanel(new FlowLayout(FlowLayout.CENTER, 10,10));
+	private JPanel panelDescarga = new JPanel(new FlowLayout(FlowLayout.CENTER, 10,10));
 	private JPanel panelLista = new JPanel();
 	private JLabel imagenLabel;
 	private JLabel detalles;
+	private JButton desInicio;
+	private JButton desFin;
+	private JButton descargar = new JButton("Descargar");
+	private JTextField textInicio;
+	private JTextField textFin;
+	private JList<Aux> jLista;
 	private Listado lista;
+	private Dimension sizeImage = new Dimension(300, 500);
 	private RenderLista render = new RenderLista();
 	
-	public JDialogContenido (JFrame modal, Listado lista){
+	/**
+	 * Constructor 
+	 * @param modal: Ventana;
+	 * @param lista: Lista de capitulos y mangas;
+	 */
+	public JDialogContenido (JFrame modal, Listado lista, JLabel image){
 		super(modal, true);
-		
 		this.lista = lista;
-		
+		//this.imagenLabel = new JLabel(image.getIcon());
 		setLayout(new BorderLayout());
 		
-		panelIzquierda(lista.getImg());
+		//Paneles
+		panelIzquierda();
 		panelCentral(ValuesStrings.LEO_MANGA+lista.getUrl());
 		
+		//Propiedades de visivilidad
 		pack();
 		setLocationRelativeTo(modal);
 		setVisible(true);
 	}
 
-	private void panelIzquierda(Image imagen) {
-		imagenLabel  = new JLabel(new ImageIcon(imagen.getScaledInstance(300, 500, Image.SCALE_SMOOTH)));
+	/**
+	 * Panel Izquierdo con Imagen del manga
+	 * @param imagen: Portada del manga
+	 */
+	private void panelIzquierda() {
+		imagenLabel  = new JLabel(new ImageIcon(lista.getImg().getScaledInstance(sizeImage.width, sizeImage.height, Image.SCALE_SMOOTH)));
 		panelIz.add(imagenLabel);
 		add(panelIz, BorderLayout.WEST);
 	}
 	
+	/**
+	 * Panel Central
+	 * @param url
+	 */
 	private void panelCentral(String url) {
-		//Busqueda b = new Busqueda("id=\"page-manga\"", "class=\"pub-desktop pub-300 pub-cap\"", ValuesStrings.DETALLE_CONTENIDO_MANGA);
+		
+		//<<INICIO>> de la descripcion del manga
 		BusquedaContenidoManga b = new BusquedaContenidoManga();
 		lista = b.BuscarContenido(url, lista);
 		
 		String detalle = lista.getDetalle();
 		
-		detalles = new JLabel("<html>" +FormatText.utf8(detalle) + "</html>");
-		detalles.setPreferredSize(new Dimension(600,250));
+		detalles = new JLabel("<html>" +detalle + "</html>");
+		detalles.setPreferredSize(new Dimension(600,220));
 		panelDetalle.add(detalles);
+		//<<FIN>> de la descripcion del manga
 		
-		String[] numeros = lista.getCapNumero();
-		String[] nombres = lista.getCapNombre();
-		String[] fechas = lista.getCapFecha();
+		panelDescarga.setBorder(new SoftBevelBorder(BevelBorder.LOWERED));
 		
-		/*panelLista.setLayout(new GridLayout(nombres.length, 3, 0, 5));
-		for(int i = 0; i < nombres.length; i++) {
-			JLabel label1 = new JLabel(FormatText.utf8(numeros[i]));
-			JLabel label2 = new JLabel(FormatText.utf8(nombres[i]));
-			JLabel label3 = new JLabel(FormatText.utf8(fechas[i]));
-			
-			label1.setBorder(new javax.swing.border.MatteBorder(1,0,0,0,Color.BLACK));
-			label1.addMouseListener(this);
-			label2.setBorder(new javax.swing.border.MatteBorder(1,0,0,0,Color.BLACK));
-			label2.addMouseListener(this);
-			label3.setBorder(new javax.swing.border.MatteBorder(1,0,0,0,Color.BLACK));
-			label3.addMouseListener(this);
-			
-			panelLista.add(label1);
-			panelLista.add(label2);
-			panelLista.add(label3);
-		}*/
+		desInicio = new JButton("Desde: ");
+		desInicio.addActionListener(this);
+		desFin = new JButton("Hasta:");
+		desFin.addActionListener(this);
+		textInicio = new JTextField(15);
+		textInicio.setEnabled(false);
+		textFin = new JTextField(15);
+		textFin.setEnabled(false);
 		
-		JList<Aux> jLista = new JList<Aux>();
+		panelDescarga.add(desInicio);
+		panelDescarga.add(textInicio);
+		panelDescarga.add(desFin);
+		panelDescarga.add(textFin);
+		panelDescarga.add(descargar);
+		
+		//<<INICIO>> de la Lista de capitulos
+		jLista = new JList<Aux>();
 		jLista.setListData(lista.getAux());
 		jLista.setCellRenderer(render);
 		
-		
-		
-		
 		JScrollPane scroll = new JScrollPane();
 		scroll.getVerticalScrollBar().setUnitIncrement(20);
-		//scroll.add(panelLista);
 		scroll.setViewportView(jLista);
+		//<<FIN>> De la lista de capitulos
 		
+		//<<INICIO>> de agregar los paneles al panel Central
 		panelCen.add(panelDetalle, BorderLayout.NORTH);
-		panelCen.add(scroll, BorderLayout.CENTER);
-		
+		panelCen.add(panelDescarga, BorderLayout.CENTER);
+		panelCen.add(scroll, BorderLayout.SOUTH);
 		add(panelCen, BorderLayout.CENTER);
+		//<<FIN>> de agregar los paneles al panel Central
 	}
 
 	@Override
@@ -151,4 +177,33 @@ public class JDialogContenido extends JDialog implements MouseListener{
 		// TODO Auto-generated method stub
 		
 	}
+	/*
+	 * (non-Javadoc)
+	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 */
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		if(e.getSource().equals(desInicio)) {
+			textInicio.setText(jLista.getModel().getElementAt(jLista.getSelectedIndex()).numero);
+		}else if(e.getSource().equals(desFin)) {
+			textFin.setText(jLista.getModel().getElementAt(jLista.getSelectedIndex()).numero);
+		}
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

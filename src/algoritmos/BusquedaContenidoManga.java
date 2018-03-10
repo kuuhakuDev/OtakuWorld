@@ -42,7 +42,7 @@ public class BusquedaContenidoManga extends Busqueda{
 	private void getDetalles(Listado lista){
 		
 		String[] lineas = buscarLinea(codigo, DETALLE_CONTENIDO_MANGA, detallesIni, detallesFin, 1);
-		lista.setDetalle(extraerTexto(ValuesStrings.NADA, lineas, DETALLE_CONTENIDO_MANGA, 0)[0]);
+		lista.setDetalle(FormatText.utf8(extraerTexto(ValuesStrings.NADA, lineas, DETALLE_CONTENIDO_MANGA, 0)[0]));
 		
 	}
 
@@ -55,9 +55,10 @@ public class BusquedaContenidoManga extends Busqueda{
 			String[] fecha = extraerTexto(ValuesStrings.ETIQUETAS, lineas, FECHA_LISTA_MANGA, 0);
 			
 			for(int i = 0; i < cap.length; i++) {
-				lista.addCapNumero(cap[i]);
-				lista.addCapNombre(nombre[i]);
-				lista.addCapFecha(fecha[i]);
+				lista.addCapNumero(FormatText.utf8(cap[i]));
+				lista.addCapNombre(FormatText.utf8(nombre[i]));
+				lista.addCapFecha(FormatText.utf8(fecha[i]));
+				System.out.println(i);
 			}
 	}
 }

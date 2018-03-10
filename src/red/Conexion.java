@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.awt.Image;
 import java.net.MalformedURLException;
+import java.net.SocketTimeoutException;
 
 
 public class Conexion {
@@ -40,9 +41,13 @@ public class Conexion {
 	         httpcon.disconnect();
 	         
 	            //codigo.add(add);
+	      } catch (SocketTimeoutException e) {
+		    	 e.printStackTrace();
+		    	 System.out.println("Ocurrio una descarga en la descarga, por favor, vuelva a intentarlo.");
 	      } catch (IOException e) {
 	         // TODO Auto-generated catch block
 	         e.printStackTrace();
+	       
 	      }
 	      
 	      String[] codigoFuente = new String[codigo.size()];
