@@ -132,7 +132,7 @@ public class PanelView extends JPanel implements MouseListener{
 	public void mouseClicked(MouseEvent arg0) {
 		// TODO Auto-generated method stub
 		System.out.println(getString());
-		new JDialogContenido(modal, lista, imagen);
+		new JDialogContenido(modal, lista, lista.getTitulo());
 	}
 
 	@Override

@@ -14,6 +14,7 @@ public class Listado {
 	private List<String> capNumero = new ArrayList<String>();
 	private List<String> capNombre = new ArrayList<String>();
 	private List<String> capFecha = new ArrayList<String>();
+	private List<String> caps = new ArrayList<String>();
 
 	public String getTitulo() {
 		return titulo;
@@ -85,6 +86,16 @@ public class Listado {
 		capFecha.add(fecha);
 	}
 	
+	public String[] getCapUrl() {
+		String[] urls = new String[caps.size()];
+		urls = caps.toArray(urls);
+		return urls;
+	}
+	
+	public void addCapUrl(String capUrl) {
+		caps.add(capUrl);
+	}
+	
 	public Aux[] getAux(){
 		Aux[] aux = new Aux[capNombre.size()];
 		
@@ -92,7 +103,8 @@ public class Listado {
 			aux[i] = new Aux(
 					capNombre.get(i),
 					capNumero.get(i),
-					capFecha.get(i)
+					capFecha.get(i),
+					caps.get(i)
 					);
 		}
 		
@@ -104,13 +116,14 @@ public class Listado {
 		public String nombre;
 		public String numero;
 		public String fecha;
+		public String urls;
 		
-		public Aux(String nombre, String numero, String fecha) {
+		public Aux(String nombre, String numero, String fecha, String caps) {
 			
 			this.nombre = nombre;
 			this.numero = numero;
 			this.fecha = fecha;
-			
+			this.urls = caps;
 		}
 		
 	}

@@ -57,17 +57,21 @@ public class JDialogContenido extends JDialog implements MouseListener, ActionLi
 	private Listado lista;
 	private Dimension sizeImage = new Dimension(300, 500);
 	private RenderLista render = new RenderLista();
+	private int inicio, fin;
+	private String titulo;
+	private BusquedaContenidoManga b;
 	
 	/**
 	 * Constructor 
 	 * @param modal: Ventana;
 	 * @param lista: Lista de capitulos y mangas;
 	 */
-	public JDialogContenido (JFrame modal, Listado lista, JLabel image){
+	public JDialogContenido (JFrame modal, Listado lista, String titulo){
 		super(modal, true);
 		this.lista = lista;
-		//this.imagenLabel = new JLabel(image.getIcon());
+		this.titulo = titulo;
 		setLayout(new BorderLayout());
+		setTitle("OtakuWord - Mangas - " + titulo);
 		
 		//Paneles
 		panelIzquierda();
@@ -96,7 +100,7 @@ public class JDialogContenido extends JDialog implements MouseListener, ActionLi
 	private void panelCentral(String url) {
 		
 		//<<INICIO>> de la descripcion del manga
-		BusquedaContenidoManga b = new BusquedaContenidoManga();
+		b = new BusquedaContenidoManga();
 		lista = b.BuscarContenido(url, lista);
 		
 		String detalle = lista.getDetalle();
@@ -116,6 +120,7 @@ public class JDialogContenido extends JDialog implements MouseListener, ActionLi
 		textInicio.setEnabled(false);
 		textFin = new JTextField(15);
 		textFin.setEnabled(false);
+		descargar.addActionListener(this);
 		
 		panelDescarga.add(desInicio);
 		panelDescarga.add(textInicio);
@@ -187,8 +192,28 @@ public class JDialogContenido extends JDialog implements MouseListener, ActionLi
 		// TODO Auto-generated method stub
 		if(e.getSource().equals(desInicio)) {
 			textInicio.setText(jLista.getModel().getElementAt(jLista.getSelectedIndex()).numero);
+			inicio = jLista.getSelectedIndex();
+			
 		}else if(e.getSource().equals(desFin)) {
 			textFin.setText(jLista.getModel().getElementAt(jLista.getSelectedIndex()).numero);
+			fin = jLista.getSelectedIndex();
+			
+		}else if(e.getSource().equals(descargar)) {
+			if(inicio > fin) {
+				int aux = inicio;
+				inicio = fin;
+				fin = aux;
+			}
+			
+			String[] urls = new String[(fin - inicio) + 1];
+			String[] capitulos = new String[(fin - inicio) + 1];
+			for(int i = inicio; i <= fin; i++) {
+				urls[i-inicio] = jLista.getModel().getElementAt(i).urls;
+				capitulos[i-inicio] = jLista.getModel().getElementAt(i).numero;
+			}
+			
+			b.DescargarCapitulos(urls, titulo, capitulos);
+			
 		}
 	}
 }
