@@ -2,14 +2,23 @@ package manga;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Toolkit;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
+import javax.swing.JLabel;
+import javax.swing.JButton;
+import javax.swing.JPanel;
 
-public class VentanaManga extends JFrame implements ComponentListener{
+import gui.Descargas;
+import kSwing.KJFrame;
+
+public class VentanaManga extends KJFrame implements ComponentListener{
 
 	/**
 	 * 
@@ -22,6 +31,11 @@ public class VentanaManga extends JFrame implements ComponentListener{
 	private float y = (float) (tool.getScreenSize().height*0.8);
 	private Dimension sizeFrame = new Dimension((int)x,(int)y);
 	private PanelManga panelManga;
+	private JPanel panelNort = new JPanel();
+	private JLabel labelBusqueda;
+	private JTextField textBusqueda;
+	private JButton buttonBusqueda;
+	
 
 	private VentanaManga() {
 		
@@ -29,11 +43,15 @@ public class VentanaManga extends JFrame implements ComponentListener{
 		addComponentListener(this);
 		setTitle("OtakuWorld-Manga");
 		setSize(sizeFrame);
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
 		
-		centro();
+		norte();
 		setVisible(true);
+		Descargas.getInstans().setVisible(false);
+		centro();
+		
+		
 	}
 	
 	public static VentanaManga getInstans() {
@@ -44,6 +62,22 @@ public class VentanaManga extends JFrame implements ComponentListener{
 			return manga;
 		}
 		
+	}
+	
+	private void norte() {
+		labelBusqueda = new JLabel("Buscar: ");
+		textBusqueda = new JTextField();
+		buttonBusqueda = new JButton("Buscar");
+		/*panelNort.setLayout(new FlowLayout(FlowLayout.RIGHT));
+		panelNort.add(labelBusqueda);
+		panelNort.add(textBusqueda);
+		panelNort.add(buttonBusqueda);*/
+		panelNort.setLayout(new BorderLayout(10,5));
+		panelNort.setBorder(new EmptyBorder(10,10,10,10));
+		panelNort.add(labelBusqueda, BorderLayout.WEST);
+		panelNort.add(textBusqueda, BorderLayout.CENTER);
+		panelNort.add(buttonBusqueda, BorderLayout.EAST);
+		add(panelNort, BorderLayout.NORTH);
 	}
 	
 	private void centro() {

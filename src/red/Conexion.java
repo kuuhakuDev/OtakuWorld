@@ -2,6 +2,11 @@ package red;
 
 import java.net.URL;
 import javax.imageio.ImageIO;
+import javax.swing.JLabel;
+
+import gui.Descargas;
+import gui.ProgressBar;
+
 import java.net.HttpURLConnection;
 import java.io.InputStream;
 import java.io.BufferedReader;
@@ -17,16 +22,31 @@ import java.net.SocketTimeoutException;
 
 
 public class Conexion {
+	
+	private URL url;
+	private HttpURLConnection httpcon;
+	
+	private void conectar(String link) {
+		 
+		 try {
+			 url = new URL(link);
+			 httpcon = (HttpURLConnection) url.openConnection();
+			 httpcon.addRequestProperty("User-Agent", "Mozilla/4.76");
+			 httpcon.setConnectTimeout(1000);
+		} catch (SocketTimeoutException e) {
+	    	 e.printStackTrace();
+	    	 System.out.println("Ocurrio una error en la descarga del codigo fuente, por favor, vuelva a intentarlo.");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+      
+     }
+	}
 
 	public String[] codigoFuente(String link) {
 		List<String> codigo = new ArrayList<String>();
 	      try {
-	         // Se abre la conexión
-	         URL url = new URL(link);
-	         
-	         HttpURLConnection httpcon = (HttpURLConnection) url.openConnection(); 
-	         httpcon.addRequestProperty("User-Agent", "Mozilla/4.76");
-	         httpcon.setConnectTimeout(1000);
+	    	  conectar(link);
 	         
 	         // Lectura
 	         InputStream is = httpcon.getInputStream();
@@ -43,8 +63,8 @@ public class Conexion {
 	         
 	            //codigo.add(add);
 	      } catch (SocketTimeoutException e) {
-		    	 e.printStackTrace();
-		    	 System.out.println("Ocurrio una descarga en la descarga, por favor, vuelva a intentarlo.");
+	    	  e.printStackTrace();
+	    	  System.out.println("Ocurrio una error en la descarga del codigo fuente, por favor, vuelva a intentarlo.");
 	      } catch (IOException e) {
 	         // TODO Auto-generated catch block
 	         e.printStackTrace();
@@ -74,6 +94,10 @@ public class Conexion {
 				System.out.println(i + " = " + direccion[i]);
 				
 			} 
+		   }catch (SocketTimeoutException e) {
+		    	 e.printStackTrace();
+		    	 System.out.println("Ocurrio una error en la descarga, por favor, vuelva a intentarlo.");
+		    	 descargar(direccion);
 		   }catch (MalformedURLException e) {
 			   // TODO Auto-generated catch block
 			   e.printStackTrace();
@@ -85,11 +109,21 @@ public class Conexion {
 	       
 	   }
 	
-	public void descargarMangas(List<String[]> direccion, String titulo, String[] capitulo){
+	public void descargarMangas(List<String[]> direccion, String titulo, String[] capitulo, ProgressBar progreso, ProgressBar progreso2, JLabel label){
 		   
+			
 		   BufferedImage[] imagenes = new BufferedImage[direccion.size()];
 		   try {
-		   for(int i = 0; i < direccion.size(); i++){
+			   progreso2.resetear();
+			   int total2 = direccion.size();
+			   progreso2.setTotal(total2);
+		   for(int i = direccion.size()-1; i >= 0; i--){
+			   
+			   label.setText(capitulo[i]);
+			   progreso.resetear();
+			   int total = direccion.get(i).length;
+			   progreso.setTotal(total);
+			   
 			   for(int j = 0; j < direccion.get(i).length; j++) {
 				   File carpeta = new File("Mangas");
 				   if(!carpeta.exists()) {
@@ -124,16 +158,16 @@ public class Conexion {
 				       ImageIO.write(imagenes[i], "jpg", carpeta4);
 				       System.out.println(i + " = " + direccion.get(i)[j]);
 				   }
-
+				   progreso.aumentar(j+1);
 			   }
-			   
+			   progreso2.aumentar(total2 - i);
 			   				
 			} 
 		   System.out.println("Capitilo/s descargado con exito");
 		      } catch (SocketTimeoutException e) {
 			    	 e.printStackTrace();
 			    	 System.out.println("Ocurrio una descarga en la descarga, por favor, vuelva a intentarlo.");
-			    	 descargarMangas(direccion, titulo, capitulo);
+			    	 descargarMangas(direccion, titulo, capitulo, progreso, progreso2, label);
 		   }catch (MalformedURLException e) {
 			   // TODO Auto-generated catch block
 			   e.printStackTrace();

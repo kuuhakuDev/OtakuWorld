@@ -8,16 +8,18 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.border.EmptyBorder;
 
+import kSwing.KJFrame;
 import manga.VentanaManga;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class VentanaPrincipal extends JFrame implements ActionListener{
+public class VentanaPrincipal extends KJFrame implements ActionListener{
 
 	/**
 	 * 
@@ -32,8 +34,11 @@ public class VentanaPrincipal extends JFrame implements ActionListener{
 												tool.getScreenSize().height/2);
 	private Font letra = new Font("Time New Roman", Font.BOLD, 30);
 
-	
+	/**
+	 * Constructor
+	 */
 	public VentanaPrincipal() {
+		super();
 		
 		setTitle("OtakuWorld");
 		setLayout(new BorderLayout());
@@ -62,10 +67,9 @@ public class VentanaPrincipal extends JFrame implements ActionListener{
 		noticias = new JButton("Noticias");
 		noticias.setPreferredSize(size);
 		noticias.addActionListener(this);
-		noticias.setEnabled(false);
+		//noticias.setEnabled(false);
 		
 		panelCentral = new JPanel(new FlowLayout(FlowLayout.CENTER, 100, 30));
-		
 		panelCentral.add(anime);
 		panelCentral.add(manga);
 		panelCentral.add(noticias);
@@ -95,9 +99,11 @@ public class VentanaPrincipal extends JFrame implements ActionListener{
 		else if(e.getSource().equals(manga)) {
 			System.out.println("Manga");
 			VentanaManga.getInstans();
+			dispose();
 		}
 		else if(e.getSource().equals(noticias)) {
-			System.out.println("Noticias");			
+			System.out.println("Noticias");	
+			Descargas.getInstans();
 		}
 	}
 }

@@ -46,8 +46,10 @@ public class JDialogContenido extends JDialog implements MouseListener, ActionLi
 	private JPanel panelDetalle = new JPanel(new FlowLayout(FlowLayout.CENTER, 10,10));
 	private JPanel panelDescarga = new JPanel(new FlowLayout(FlowLayout.CENTER, 10,10));
 	private JPanel panelLista = new JPanel();
+	private JPanel panelProgreso = new JPanel(new BorderLayout());
 	private JLabel imagenLabel;
 	private JLabel detalles;
+	private JLabel labelDescargas;
 	private JButton desInicio;
 	private JButton desFin;
 	private JButton descargar = new JButton("Descargar");
@@ -60,6 +62,8 @@ public class JDialogContenido extends JDialog implements MouseListener, ActionLi
 	private int inicio, fin;
 	private String titulo;
 	private BusquedaContenidoManga b;
+	private ProgressBar progresoPrincipal;
+	private ProgressBar progresoSecundario;
 	
 	/**
 	 * Constructor 
@@ -76,6 +80,7 @@ public class JDialogContenido extends JDialog implements MouseListener, ActionLi
 		//Paneles
 		panelIzquierda();
 		panelCentral(ValuesStrings.LEO_MANGA+lista.getUrl());
+		panelAbajo();
 		
 		//Propiedades de visivilidad
 		pack();
@@ -145,6 +150,20 @@ public class JDialogContenido extends JDialog implements MouseListener, ActionLi
 		add(panelCen, BorderLayout.CENTER);
 		//<<FIN>> de agregar los paneles al panel Central
 	}
+	
+	private void panelAbajo() {
+		progresoPrincipal = new ProgressBar();
+		progresoSecundario = new ProgressBar();
+		panelProgreso.add(progresoPrincipal, BorderLayout.SOUTH);
+		panelProgreso.add(progresoSecundario, BorderLayout.CENTER);
+		
+		labelDescargas = new JLabel("No hay descargas");
+		JPanel panel2 = new JPanel(new FlowLayout(FlowLayout.CENTER));
+		panel2.add(labelDescargas, BorderLayout.CENTER);
+		panelProgreso.add(panel2, BorderLayout.NORTH);
+		
+		add(panelProgreso, BorderLayout.SOUTH);
+	}
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
@@ -212,7 +231,8 @@ public class JDialogContenido extends JDialog implements MouseListener, ActionLi
 				capitulos[i-inicio] = jLista.getModel().getElementAt(i).numero;
 			}
 			
-			b.DescargarCapitulos(urls, titulo, capitulos);
+			//Descargas.getInstans().setVisible(true);
+			b.DescargarCapitulos(urls, titulo, capitulos, progresoPrincipal, progresoSecundario, labelDescargas);
 			
 		}
 	}

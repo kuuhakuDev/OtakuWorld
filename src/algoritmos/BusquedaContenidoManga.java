@@ -2,6 +2,9 @@ package algoritmos;
 
 import java.util.List;
 
+import javax.swing.JLabel;
+
+import gui.ProgressBar;
 import recursos.Listado;
 import red.Conexion;
 import values.ValuesStrings;
@@ -72,7 +75,7 @@ public class BusquedaContenidoManga extends Busqueda{
 			}
 	}
 	
-	public void DescargarCapitulos(String[] urls, String titulo, String[] capitulo) {
+	public void DescargarCapitulos(String[] urls, String titulo, String[] capitulo, ProgressBar progreso1, ProgressBar progreso2, JLabel label) {
 		String[] codigo = null;
 		String[] lineas = null;
 		String[] urls1 = null;
@@ -85,7 +88,7 @@ public class BusquedaContenidoManga extends Busqueda{
 			lineas = buscarLinea(codigo, URL_CONTENIDO_CAPITULO_IMAGEN, imagenesIni, imagenesFin, 0);
 			urlLista.add(extraerTexto(ValuesStrings.COMILLAS, lineas, IMAGEN_LISTA_MANGA, 0));
 		}
-		new Hilo(urlLista, titulo, capitulo);
+		new Hilo(urlLista, titulo, capitulo, progreso1, progreso2, label);
 	}
 	
 	class Hilo extends Thread{
@@ -93,15 +96,20 @@ public class BusquedaContenidoManga extends Busqueda{
 		private List<String[]> urls;
 		private String titulo;
 		private String[] capitulo;
+		private ProgressBar progreso, progreso2;
+		private JLabel label;
 		
 		public void run() {
-			c.descargarMangas(urls, titulo, capitulo);
+			c.descargarMangas(urls, titulo, capitulo, progreso, progreso2, label);
 		}
 		
-		public Hilo(List<String[]> lista, String titulo, String[] capitulo) {
+		public Hilo(List<String[]> lista, String titulo, String[] capitulo, ProgressBar progreso, ProgressBar progreso2, JLabel label) {
 			this.urls = lista;
 			this.titulo = titulo;
 			this.capitulo = capitulo;
+			this.progreso = progreso;
+			this.progreso2 = progreso2;
+			this.label = label;
 			start();
 		}
 		

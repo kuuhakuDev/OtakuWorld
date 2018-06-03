@@ -29,8 +29,8 @@ public class PanelView extends JPanel implements MouseListener{
 	private Dimension sizeMain = new Dimension(200,325);
 	private Dimension sizeImage = new Dimension(200,250);
 	private JPanel panelLabel = new JPanel(new FlowLayout());
-	private Color suave = new Color(100, 100, 100);
-	private Color fuerte = new Color(60, 60, 60);
+	private Color suave = new Color(160, 200, 255);
+	private Color fuerte = new Color(200, 35, 50);
 	private LineBorder bordeOut = new LineBorder(suave, 6, true);
 	private LineBorder bordePress = new LineBorder(fuerte, 8, true);
 	private LineBorder bordeIn = new LineBorder(fuerte, 6, true);
