@@ -11,7 +11,7 @@ import values.ValuesStrings;
 import gui.PanelView;
 import recursos.Listado;
 
-public class Busqueda {
+public class Busqueda implements Runnable{
 	private Conexion c;
 	private String[] codigo;
 	private String fin;
@@ -20,6 +20,10 @@ public class Busqueda {
 	private String url;
 	private String detalles;
 	private String imagen;
+	private Thread hilo;
+	private String link;
+	private int continuar = 0;
+	private boolean bucle = true; 
 	
 	public Busqueda(String inicio, String fin, String titulo, String url, String detalles, String imagen){
 		c = new Conexion();
@@ -44,10 +48,18 @@ public class Busqueda {
 		
 	}
 	
-	
+	public void buscarLista(String url) {
+		link = url;
+		hilo = new Thread(this);
+		hilo.start();
+	}
 	
 	public Listado[] buscarTodo(JFrame modal, String url){
 		codigo = c.codigoFuente(url);
+		
+		String nombres = getTitulo();
+		
+		/*****************
 		String[] nombres = getTitulo();
 		String[] detalles = getDetalles();
 		String[] urls = getURL();
@@ -70,12 +82,15 @@ public class Busqueda {
 			listado[i].getString();
 		}*/
 		
-		return lista;
+		return null;
 	}
 	
-	public String buscarTodo (String url) {
+	public void actualizarCodigo(String url){
 		codigo = c.codigoFuente(url);
-		return getDetalles()[0];
+	}
+	
+	public String buscarTodo () {
+		return getDetalles();
 	}
 	
 	/*
@@ -84,37 +99,36 @@ public class Busqueda {
 	 * *****************************
 	 */
 	
-	private String[] getTitulo(){
+	public String getTitulo(){
 		
-		String[] lineas = buscarLinea(codigo, this.titulo, inicio, fin, 1);
-		String[] contenido = extraerTexto(ValuesStrings.NADA, lineas, titulo, 0);
-		
-		return contenido;
-	}
-	
-	private String[] getURL(){
-		
-		String[] lineas = buscarLinea(codigo, "href", inicio, fin, 0);
-		String[] contenido = extraerTexto(ValuesStrings.COMILLAS, lineas, "href", 0);
+		String lineas = buscarLinea(this.titulo, inicio, fin, 1);
+		String contenido = extraerTexto(ValuesStrings.NADA, lineas, titulo, 0);
 		
 		return contenido;
 	}
 	
-	private String[] getDetalles(){
+	public String getURL(){
 		
-		String[] lineas = buscarLinea(codigo, detalles, inicio, fin, 1);
-		String[] contenido = extraerTexto(ValuesStrings.NADA, lineas, detalles, 0);
-		//String[] contenido = etiquetas(lineas, "Title", 0);
+		String lineas = buscarLinea("href", inicio, fin, 0);
+		String contenido = extraerTexto(ValuesStrings.COMILLAS, lineas, "href", 0);
 		
 		return contenido;
 	}
 	
-	private Image[] getImagenes(){
+	public String getDetalles(){
 		
-		String[] lineas = buscarLinea(codigo, this.imagen, inicio, fin, 0);
-		String[] contenido = extraerTexto(ValuesStrings.COMILLAS, lineas, imagen, 0);
+		String lineas = buscarLinea(detalles, inicio, fin, 1);
+		String contenido = extraerTexto(ValuesStrings.NADA, lineas, detalles, 0);
 		
-		Image[] imagenes = c.descargar(contenido);
+		return contenido;
+	}
+	
+	private Image getImagenes(){
+		
+		String lineas = buscarLinea(this.imagen, inicio, fin, 0);
+		String contenido = extraerTexto(ValuesStrings.COMILLAS, lineas, imagen, 0);
+		
+		Image imagenes = c.descargar(contenido);
 		
 		return imagenes;
 		
@@ -127,12 +141,11 @@ public class Busqueda {
 	 */
 
 	
-	protected String[] buscarLinea(String[] codigo, String texto, String inicio, String fin, int salto){
+	public String buscarLinea(String texto, String inicio, String fin, int salto){
 		boolean entrar = false;
-		boolean bucle = true;
-		List<String> lista = new ArrayList<String>();
+		String linea = null;
 		
-		for(int i = 0; i < codigo.length && bucle; i++){
+		for(int i = continuar; i < codigo.length && bucle; i++){
 			if(codigo[i].indexOf(inicio) != -1) {
 				entrar = true;
 			}else if(codigo[i].indexOf(fin) != -1 && entrar) {
@@ -140,73 +153,72 @@ public class Busqueda {
 			}
 			if(entrar) {
 				if(codigo[i].indexOf(texto) != -1){
-					lista.add(codigo[i+salto]);
+					continuar = i+salto;
+					linea = codigo[continuar];
+					bucle = false;
 				}
-			}
-			
+			}	
 		}
 		
-		String[] str = listAString(lista);
-		
-		return str;
+		return linea;
 	}
 	
-	protected String[] comillas(String[] param, String ref, int index){
-		String[] lista = new String[param.length];
+	//Extraer codigo entre comillas.
+	public String comillas(String param, String ref, int index){
+		String lista = "";
+		int x = 0;
 		
-		for(int i = 0; i < param.length; i++){
-			int x = 0;
-			lista[i] = "";
-			for(int j = param[i].indexOf(ref, index); j < param[i].length() && x !=2; j++){
-				if(param[i].charAt(j) == '\"'){
-					x++;
-				}
-				else if(x == 1){
-					lista[i] += param[i].charAt(j);
-				}
+		for(int j = param.indexOf(ref, index); j < param.length() && x !=2; j++){
+			if(param.charAt(j) == '\"'){
+				x++;
+			}
+			else if(x == 1){
+				lista += param.charAt(j);
 			}
 		}
 		return lista;
 	}
 	
-	protected String[] etiquetas(String[] param, String ref, int index){
-		String[] lista = new String[param.length];
-		
-		for(int i = 0; i < param.length; i++){
-			int x = 0;
-			lista[i] = "";
-			for(int j = param[i].indexOf(ref); j < param[i].length() && x !=2; j++){
-				if(param[i].charAt(j) == '<' || param[i].charAt(j) == '>'){
-					x++;
-				}
-				else if(x == 1){
-					lista[i] += param[i].charAt(j);
-				}
-				//System.out.print(param[i].charAt(j));
+	//Extraer codigo entre etiquetas.
+	public String etiquetas(String param, String ref, int index){
+		String lista = "";
+		int x = 0;
+		for(int j = param.indexOf(ref, index); j < param.length() && x !=2; j++){
+			if(param.charAt(j) == '<' || param.charAt(j) == '>'){
+				x++;
+			}
+			else if(x == 1){
+				lista += param.charAt(j);
 			}
 		}
 		return lista;
 	}
 	
-	protected String[] listAString(List<String> lista){
+	/*protected String[] listAString(List<String> lista){
 		String[] str = new String[lista.size()];
 		for(int i = 0; i < lista.size(); i++){
 			str[i] = lista.get(i);
 		}
 		return str;
-	}
+	}*/
 	
 	
-	protected String[] extraerTexto(String texto, String[] lineas, String ref, int index) {
+	protected String extraerTexto(String texto, String linea, String ref, int index) {
 		if(texto.equals(ValuesStrings.COMILLAS)) {
-			return comillas(lineas, ref, index);
+			return comillas(linea, ref, index);
 		}
 		else if(texto.equals(ValuesStrings.ETIQUETAS)) {
-			return etiquetas(lineas, ref, index);
+			return etiquetas(linea, ref, index);
 		}
 		else {
-			return lineas;
+			return linea;
 		}
+	}
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		buscarTodo(null, link);
 	}
 }
 

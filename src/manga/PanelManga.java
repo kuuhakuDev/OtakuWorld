@@ -20,6 +20,7 @@ public class PanelManga extends JPanel{
 	 */
 	private static final long serialVersionUID = 1L;
 	private List<PanelView> lista = new ArrayList<PanelView>();
+	private List<Listado> listaManga = new ArrayList<Listado>();
 	private int x;
 	private int ancho = 50, largo= 50;
 	private VentanaManga ventana;
@@ -42,7 +43,7 @@ public class PanelManga extends JPanel{
 		String portada = ValuesStrings.PORTADA_MANGA;
 		
 		Busqueda b = new Busqueda(inicio, fin, titulo, url, detalles, portada);
-		Listado[] lista = b.buscarTodo(null, ValuesStrings.LEO_MANGA_DIR);
+		/*Listado[] lista = b.buscarTodo(null, ValuesStrings.LEO_MANGA_DIR);
 		
 		PanelView[] anime = new PanelView[lista.length];
 		
@@ -57,8 +58,15 @@ public class PanelManga extends JPanel{
 		
 		for(int i = 0; i < anime.length; i++) {
 			add(this.lista.get(i));
-		}
+		}*/
 		
+	}
+	
+	public void agregarManga(Listado manga) {
+		listaManga.add(manga);
+		PanelView mangaView = new PanelView(ventana, manga);
+		lista.add(mangaView);
+		add(mangaView);
 	}
 	
 //	Falta arreglar el bug para cuando tenemos menos de 6 elemenatos
