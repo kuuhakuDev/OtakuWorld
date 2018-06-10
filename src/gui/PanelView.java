@@ -46,14 +46,15 @@ public class PanelView extends JPanel implements MouseListener{
 	
 		
 	
-	public PanelView(JFrame modal,Listado lista) {
+	public PanelView(JFrame modal) {
 		
-		
+		/*
 		this.lista = lista;
 		this.titulo = lista.getTitulo();
 		this.detalle = lista.getDetalleCorto();
 		this.url = lista.getUrl();
 		this.img = lista.getImg();
+		*/
 		this.modal = modal;
 		
 		setLayout(new BorderLayout());
@@ -61,14 +62,18 @@ public class PanelView extends JPanel implements MouseListener{
 		addMouseListener(this);
 		setPreferredSize(sizeMain);
 		
-		iniComponentes();
+		//iniComponentes();
+		add(panelLabel, BorderLayout.CENTER);
 	}
 	
 	private void iniComponentes() {
 		
-		imagen = new JLabel(new ImageIcon(img.getScaledInstance(sizeImage.width, sizeImage.height, Image.SCALE_SMOOTH)));
-		imagen.setPreferredSize(sizeImage);
-		add(imagen, BorderLayout.NORTH);
+		if(img != null) {
+			imagen = new JLabel(new ImageIcon(img.getScaledInstance(sizeImage.width, sizeImage.height, Image.SCALE_SMOOTH)));
+			imagen.setPreferredSize(sizeImage);
+			add(imagen, BorderLayout.NORTH);
+		}
+		
 		
 		jNombre = new JLabel("<html>" + titulo + "</html>");
 		panelLabel.add(jNombre);
@@ -82,40 +87,45 @@ public class PanelView extends JPanel implements MouseListener{
 	 * Setters and Getters 
 	 * 
 	 */
-	protected Listado getLista() {
+	public Listado getLista() {
 		return lista;
 	}
 	
-	protected String getTitulo() {
+	public String getTitulo() {
 		return titulo;
 	}
 
-	protected void setTitulo(String titulo) {
+	public void setTitulo(String titulo) {
 		this.titulo = titulo;
+		jNombre = new JLabel("<html>" + titulo + "</html>");
+		panelLabel.add(jNombre);
 	}
 
-	protected String getDetalle() {
+	public String getDetalle() {
 		return detalle;
 	}
 
-	protected void setDetalle(String detalle) {
+	public void setDetalle(String detalle) {
 		this.detalle = detalle;
 	}
 
-	protected String getUrl() {
+	public String getUrl() {
 		return url;
 	}
 
-	protected void setUrl(String url) {
+	public void setUrl(String url) {
 		this.url = url;
 	}
 
-	protected Image getImg() {
+	public Image getImg() {
 		return img;
 	}
 
-	protected void setImg(Image img) {
+	public void setImg(Image img) {
 		this.img = img;
+		imagen = new JLabel(new ImageIcon(img.getScaledInstance(sizeImage.width, sizeImage.height, Image.SCALE_SMOOTH)));
+		imagen.setPreferredSize(sizeImage);
+		add(imagen, BorderLayout.NORTH);
 	}
 	
 	public String getString() {

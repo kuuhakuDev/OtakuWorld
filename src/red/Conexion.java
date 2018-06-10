@@ -6,11 +6,13 @@ import javax.swing.JLabel;
 
 import gui.Descargas;
 import gui.ProgressBar;
+import recursos.Fichero;
 
 import java.net.HttpURLConnection;
 import java.io.InputStream;
 import java.io.BufferedReader;
 import java.io.File;
+import java.nio.file.Files;
 import java.io.InputStreamReader;
 import java.io.IOException;
 import java.util.List;
@@ -65,6 +67,7 @@ public class Conexion {
 	      } catch (SocketTimeoutException e) {
 	    	  e.printStackTrace();
 	    	  System.out.println("Ocurrio una error en la descarga del codigo fuente, por favor, vuelva a intentarlo.");
+	    	  return codigoFuente(link);
 	      } catch (IOException e) {
 	         // TODO Auto-generated catch block
 	         e.printStackTrace();
@@ -77,37 +80,59 @@ public class Conexion {
 	      return codigoFuente;
 	   }
 	
-	public Image[] descargar(String[] direccion){
+	public Image descargar(String direccion){
 		   
-		   Image[] imagenes = new Image[direccion.length];
-		   try {
-		   for(int i = 0; i < direccion.length; i++){
+		//Image[] imagenes = new Image[direccion.length];
+		Image imagen = null;
+		String cache = "cache";
+		String path = cache + "/" + Fichero.extraerNombre(direccion);
+		boolean existe = false;
+		
+		if(Fichero.existe(cache)) {
+			if(Fichero.existe(path)){
+				existe = true;
+			}
+		}else {
+			Fichero.crearCarpeta(cache);
+			Fichero.ocultarFichero(cache);
+			
+		}
+		
+		if(!existe) {
+			try {
 			   
-				URL url = new URL("http://www.leomanga.com" + direccion[i]);
+				URL url = new URL("http://www.leomanga.com" + direccion);
 				HttpURLConnection httpcon = (HttpURLConnection) url.openConnection(); 
-		         httpcon.addRequestProperty("User-Agent", 
-		        		 "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0)");
-				
+				httpcon.addRequestProperty("User-Agent", 
+							"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0)");
+			
 				InputStream is = httpcon.getInputStream();
+			
+				imagen = ImageIO.read(is);
 				
-				imagenes[i] = ImageIO.read(is);
-				System.out.println(i + " = " + direccion[i]);
+				Fichero.guardarImagen((BufferedImage) imagen, "jpg", path);
 				
-			} 
-		   }catch (SocketTimeoutException e) {
-		    	 e.printStackTrace();
-		    	 System.out.println("Ocurrio una error en la descarga, por favor, vuelva a intentarlo.");
-		    	 descargar(direccion);
-		   }catch (MalformedURLException e) {
-			   // TODO Auto-generated catch block
-			   e.printStackTrace();
-		   }catch (IOException e) {
-			   e.printStackTrace();
-		   }
-		   
-		   return imagenes;
+				System.out.println(direccion);
+				
+			}catch (SocketTimeoutException e) {
+				e.printStackTrace();
+				System.out.println("Ocurrio una error en la descarga, por favor, vuelva a intentarlo.");
+				descargar(direccion);
+			}catch (MalformedURLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		else {
+			imagen = Fichero.getImagen(path);
+			System.out.println("Imagen " + path + " capturada");
+		}
+		
+		return imagen;
 	       
-	   }
+	}
 	
 	public void descargarMangas(List<String[]> direccion, String titulo, String[] capitulo, ProgressBar progreso, ProgressBar progreso2, JLabel label){
 		   

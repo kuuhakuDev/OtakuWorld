@@ -17,11 +17,12 @@ public class BusquedaTest {
 	String url = ValuesStrings.URL_MANGA;
 	String detalles = ValuesStrings.DETALLES_MANGA;
 	String portada = ValuesStrings.PORTADA_MANGA;
+	String puntuacion = ValuesStrings.PUNTUACION_MANGA;
 	Busqueda b;
 
 	@Before
 	public void Clases() {
-		b = new Busqueda(inicio, fin, titulo, url, detalles, portada);
+		b = new Busqueda(inicio, fin, titulo, url, detalles, portada, puntuacion);
 		b.actualizarCodigo("http://leomanga.com/directorio-manga");
 	}
 	
@@ -55,7 +56,7 @@ public class BusquedaTest {
 	
 	@Test
 	public void testTitulo() {
-		String actual = b.getTitulo();
+		String actual = b.getTitulo(0);
 		String expected = "Boku no Hero Academia";
 		String message = "..." + actual + "...\n";
 		Assert.assertEquals(message, expected, actual);
@@ -63,7 +64,7 @@ public class BusquedaTest {
 	
 	@Test
 	public void testURL() {
-		String actual = b.getURL();
+		String actual = b.getURL(0);
 		String expected = "/manga/boku-no-hero-academia";
 		String message = "..." + actual + "...\n";
 		Assert.assertEquals(message, expected, actual);
@@ -71,12 +72,19 @@ public class BusquedaTest {
 	
 	@Test
 	public void testDetalles() {
-		String actual = b.getDetalles();
+		String actual = b.getDetalles(0);
 		String expected = "La historia se sitúa en una sociedad actual, lo único que la distingue es el hecho de que las personas con superpoderes se han vuelto algo común en todo el mund...";
 		String message = "..." + actual + "...\n";
 		Assert.assertEquals(message, expected, actual);
 	}
 
+	@Test
+	public void testPuntuacion() {
+		String actual = b.getPuntuacion(0);
+		String expected = "9.4";
+		String message = "..." + actual + "...\n";
+		Assert.assertEquals(message, expected, actual);
+	}
 }
 
 

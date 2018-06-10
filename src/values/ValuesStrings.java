@@ -12,6 +12,7 @@ public class ValuesStrings {
 	public static final String PORTADA_MANGA = "img data-original";
 	public static final String URL_MANGA = "class=\"manga-all col-xs-12 col-md-6\"";
 	public static final String DETALLE_CONTENIDO_MANGA = "class=\"text-justify\"";
+	public static final String PUNTUACION_MANGA = "class=\"label label-info pull-right nota-manga\"";
 	
 	//**************************ANIME*************************************
 	public static final String LEO_ANIME = "";
