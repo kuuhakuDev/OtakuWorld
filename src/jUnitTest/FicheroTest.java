@@ -1,13 +1,15 @@
 package jUnitTest;
 
-import static org.junit.Assert.*;
+//import static org.junit.Assert.*;
 
 import org.junit.Test;
 
 import junit.framework.Assert;
 import recursos.Fichero;
 
+@SuppressWarnings("deprecation")
 public class FicheroTest {
+
 
 	@Test
 	public void test() {
@@ -16,7 +18,7 @@ public class FicheroTest {
 		String message = "..." +actual+"...\n";
 		Assert.assertEquals(message, expected, actual);
 	}
-	
+
 	@Test
 	public void testExiste() {
 		boolean actual = Fichero.existe("cache");

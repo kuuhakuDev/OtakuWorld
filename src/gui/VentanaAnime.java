@@ -51,7 +51,7 @@ public class VentanaAnime extends JFrame implements ComponentListener{
 	}
 
 	private void centro() {
-		panelAnime = new PanelAnime(this);
+		//panelAnime = new PanelAnime(this);
 		scroll.getViewport().add(panelAnime);
 		add(scroll, BorderLayout.CENTER);
 	}
@@ -71,7 +71,7 @@ public class VentanaAnime extends JFrame implements ComponentListener{
 	@Override
 	public void componentResized(ComponentEvent e) {
 		// TODO Auto-generated method stub
-		panelAnime.size(this);
+		//panelAnime.size(this);
 	}
 
 	@Override

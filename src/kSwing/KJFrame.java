@@ -1,12 +1,9 @@
 package kSwing;
 
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 
 import java.awt.Image;
 import java.awt.Toolkit;
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
 
 
 public class KJFrame extends JFrame{

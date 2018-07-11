@@ -4,8 +4,8 @@ import java.util.List;
 
 import javax.swing.JLabel;
 
+import gui.PanelView;
 import gui.ProgressBar;
-import recursos.Listado;
 import red.Conexion;
 import values.ValuesStrings;
 
@@ -32,61 +32,88 @@ public class BusquedaContenidoManga extends Busqueda{
 	private static final String imagenesFin = "class=\"viewcap-info\"";
 	
 	private Conexion c = new Conexion();
-	private String[] codigo;
 	
-	private String detalle;
-	private List<String[]> contenido = new ArrayList<String[]>();
-	
-	
-	public Listado BuscarContenido(String link, Listado lista) {
+	public void BuscarContenido(String link, PanelView lista) {
 		
-		codigo = c.codigoFuente(link);
-		
+		super.codigo = c.codigoFuente(link);
 		getDetalles(lista);
 		getContenido(lista);
 		
-		
-		
-		return lista;
 	}
 	
-	private void getDetalles(Listado lista){
+	private void getDetalles(PanelView lista){
 		
-		String[] lineas = buscarLinea(codigo, DETALLE_CONTENIDO_MANGA, detallesIni, detallesFin, 1);
-		lista.setDetalle(FormatText.utf8(extraerTexto(ValuesStrings.NADA, lineas, DETALLE_CONTENIDO_MANGA, 0)[0]));
+		super.continuar = 0;
+		super.entrar = false;
+		
+		String lineas = buscarLinea(DETALLE_CONTENIDO_MANGA, detallesIni, detallesFin, 1);
+		lista.setDetalle(FormatText.utf8(extraerTexto(ValuesStrings.NADA, lineas, DETALLE_CONTENIDO_MANGA, 0)));
 		
 	}
 
 	
-	private void getContenido(Listado lista) {
+	private void getContenido(PanelView lista) {
+		super.continuar = 0;
+		super.entrar = false;
 		
-			String[] lineas = buscarLinea(codigo, LISTA_CONTENIDO_MANGA, listaIni, listaFin, 0);
-			String[] cap = extraerTexto(ValuesStrings.ETIQUETAS, lineas, CAPITULO_LISTA_MANGA, 0);
-			String[] nombre = extraerTexto(ValuesStrings.ETIQUETAS, lineas, NOMBRE_LISTA_MANGA, 0);
-			String[] fecha = extraerTexto(ValuesStrings.ETIQUETAS, lineas, FECHA_LISTA_MANGA, 0);
-			String[] urls = extraerTexto(ValuesStrings.COMILLAS, lineas, URL_LISTA_MANGA, 0);
-			
-			for(int i = 0; i < cap.length; i++) {
-				lista.addCapNumero(FormatText.utf8(cap[i]));
-				lista.addCapNombre(FormatText.utf8(nombre[i]));
-				lista.addCapFecha(FormatText.utf8(fecha[i]));
-				lista.addCapUrl(FormatText.utf8("http://www.leomanga.com" + urls[i]));
+		List<String> lineas = new ArrayList<String>();
+		boolean salir = false;
+
+		do {
+			String linea = buscarLinea(LISTA_CONTENIDO_MANGA, listaIni, listaFin, 0);
+			if(linea != "") {
+				continuar += 1;
+				lineas.add(linea);
+			}else {
+				salir = true;
+			}
+			System.out.println(linea);
+		}while(!salir);
+		System.out.println("2");
+			for(int i = 0; i < lineas.size(); i++) {
+				System.out.println("3");
+				lista.addCapNumero(FormatText.utf8(extraerTexto(ValuesStrings.ETIQUETAS, lineas.get(i), CAPITULO_LISTA_MANGA, 0)));
+				lista.addCapNombre(FormatText.utf8(extraerTexto(ValuesStrings.ETIQUETAS, lineas.get(i), NOMBRE_LISTA_MANGA, 0)));
+				lista.addCapFecha(FormatText.utf8(extraerTexto(ValuesStrings.ETIQUETAS, lineas.get(i), FECHA_LISTA_MANGA, 0)));
+				lista.addCapUrl(FormatText.utf8("http://www.leomanga.com" + extraerTexto(ValuesStrings.COMILLAS, lineas.get(i), URL_LISTA_MANGA, 0)));
 				System.out.println(i);
 			}
 	}
 	
 	public void DescargarCapitulos(String[] urls, String titulo, String[] capitulo, ProgressBar progreso1, ProgressBar progreso2, JLabel label) {
-		String[] codigo = null;
-		String[] lineas = null;
-		String[] urls1 = null;
+		String[] codigo = new String[0];
+		String linea = null;
+		String urls1 = null;
 		List<String[]> urlLista = new ArrayList<String[]>();
+		System.out.println("1");
 		for(int i = 0; i < urls.length; i++) {
-			codigo = c.codigoFuente(urls[i]);
-			lineas = buscarLinea(codigo, URL_CONTENIDO_CAPITULO, capIni, capFin, 0);
-			urls1 = extraerTexto(ValuesStrings.COMILLAS, lineas, URL_LISTA_MANGA, 0);
-			codigo = c.codigoFuente("http://leomanga.com" + urls1[0]);
-			lineas = buscarLinea(codigo, URL_CONTENIDO_CAPITULO_IMAGEN, imagenesIni, imagenesFin, 0);
-			urlLista.add(extraerTexto(ValuesStrings.COMILLAS, lineas, IMAGEN_LISTA_MANGA, 0));
+			super.continuar = 0;
+			super.entrar = false;
+			boolean boo = true;
+			super.codigo = c.codigoFuente(urls[i]);
+			
+			linea = buscarLinea(URL_CONTENIDO_CAPITULO, capIni, capFin, 0);
+			urls1 = extraerTexto(ValuesStrings.COMILLAS, linea, URL_LISTA_MANGA, 0);
+			super.codigo = c.codigoFuente("http://leomanga.com" + urls1);
+			super.entrar = false;
+			List<String> lineas = new ArrayList<String>();
+			System.out.println("2");
+			int x = 0;
+			do {
+				continuar = x+1;
+				linea = buscarLinea(URL_CONTENIDO_CAPITULO_IMAGEN, imagenesIni, imagenesFin, 0);
+				if(linea != "") {
+					lineas.add(extraerTexto(ValuesStrings.COMILLAS, linea, IMAGEN_LISTA_MANGA, 0));
+					System.out.println("3");
+				}
+				else {
+					boo=false;
+					System.out.println("4");
+				}
+				x = continuar;
+			}while(boo);
+			System.out.println("5");
+			urlLista.add(lineas.toArray(codigo));
 		}
 		new Hilo(urlLista, titulo, capitulo, progreso1, progreso2, label);
 	}

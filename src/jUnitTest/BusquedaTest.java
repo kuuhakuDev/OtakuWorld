@@ -1,7 +1,5 @@
 package jUnitTest;
 
-import static org.junit.Assert.*;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -9,6 +7,7 @@ import algoritmos.Busqueda;
 import junit.framework.Assert;
 import values.ValuesStrings;
 
+@SuppressWarnings("deprecation")
 public class BusquedaTest {
 	
 	String inicio = ValuesStrings.INICIO_MANGA;
@@ -56,15 +55,16 @@ public class BusquedaTest {
 	
 	@Test
 	public void testTitulo() {
-		String actual = b.getTitulo(0);
+		String actual = b.getTitulo();
 		String expected = "Boku no Hero Academia";
 		String message = "..." + actual + "...\n";
 		Assert.assertEquals(message, expected, actual);
 	}
 	
+
 	@Test
 	public void testURL() {
-		String actual = b.getURL(0);
+		String actual = b.getURL();
 		String expected = "/manga/boku-no-hero-academia";
 		String message = "..." + actual + "...\n";
 		Assert.assertEquals(message, expected, actual);
@@ -72,7 +72,7 @@ public class BusquedaTest {
 	
 	@Test
 	public void testDetalles() {
-		String actual = b.getDetalles(0);
+		String actual = b.getDetalles();
 		String expected = "La historia se sitúa en una sociedad actual, lo único que la distingue es el hecho de que las personas con superpoderes se han vuelto algo común en todo el mund...";
 		String message = "..." + actual + "...\n";
 		Assert.assertEquals(message, expected, actual);
@@ -80,7 +80,7 @@ public class BusquedaTest {
 
 	@Test
 	public void testPuntuacion() {
-		String actual = b.getPuntuacion(0);
+		String actual = b.getPuntuacion();
 		String expected = "9.4";
 		String message = "..." + actual + "...\n";
 		Assert.assertEquals(message, expected, actual);

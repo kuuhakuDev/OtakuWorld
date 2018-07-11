@@ -2,7 +2,6 @@ package manga;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Toolkit;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
@@ -108,8 +107,9 @@ public class VentanaManga extends KJFrame implements ComponentListener{
 	@Override
 	public void componentResized(ComponentEvent arg0) {
 		// TODO Auto-generated method stub
-		panelManga.size(this);
-		
+		PanelManga.size(this);
+		//Aqui arriba se ha cambiado. 
+		//En caso de fallo el codigo anterior era "panelManga.size(this);"
 	}
 
 	@Override

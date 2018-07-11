@@ -3,10 +3,7 @@ package gui;
 import javax.swing.JDialog;
 import javax.swing.JList;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Toolkit;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Descargas extends JDialog{
 
@@ -20,7 +17,6 @@ public class Descargas extends JDialog{
 												tool.getScreenSize().height/3);
 
 	private static Descargas descarga;
-	private static List<ProgressBar> listaDescargas = new ArrayList<ProgressBar>();
 	private static JList<ProgressBar> lista = new JList<ProgressBar>();
 	
 	private Descargas() {

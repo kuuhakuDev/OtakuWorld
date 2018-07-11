@@ -1,20 +1,23 @@
 package gui;
+import javax.swing.JPanel;
+/*
 
 import javax.swing.JFrame;
-import javax.swing.JPanel;
+
 import java.awt.FlowLayout;
 import java.awt.Dimension;
 import java.util.List;
 import java.util.ArrayList;
 import algoritmos.Busqueda;
 import values.ValuesStrings;
-
+*/
 public class PanelAnime extends JPanel{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
+	/*
+	 * 
+	 *
+	
 	private List<PanelView> lista = new ArrayList<PanelView>();
 	private int x;
 	private int ancho = 50, largo= 50;
@@ -35,8 +38,8 @@ public class PanelAnime extends JPanel{
 		String detalles = ValuesStrings.DETALLES_MANGA;
 		String portada = ValuesStrings.PORTADA_MANGA;
 		
-		Busqueda b = new Busqueda(inicio, fin, titulo, url, detalles, portada);
-		PanelView[] anime = b.buscarTodo(new JFrame(), "");
+		//Busqueda b = new Busqueda(inicio, fin, titulo, url, detalles, portada);
+		PanelView[] anime = null; //b.buscarTodo(new JFrame(), "");
 		
 		for(int i = 0; i < anime.length; i++) {
 			//lista.add(new ViewAnime("Naruto", "", "",new ImageIcon(getClass().getResource("/image/minato.jpg")).getImage()));
@@ -80,5 +83,5 @@ public class PanelAnime extends JPanel{
 			x = i;
 		}
 	}
-	
+*/	
 }

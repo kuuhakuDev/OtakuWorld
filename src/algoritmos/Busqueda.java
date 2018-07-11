@@ -1,20 +1,13 @@
 package algoritmos;
 
-import java.util.List;
-
-import javax.swing.JFrame;
-
 import java.awt.Image;
-import java.util.ArrayList;
 import red.Conexion;
 import values.ValuesStrings;
-import gui.PanelView;
 import manga.PanelManga;
-import recursos.Listado;
 
 public class Busqueda implements Runnable{
 	private Conexion c;
-	private String[] codigo;
+	protected String[] codigo;
 	private String fin;
 	private String inicio;
 	private String titulo;
@@ -24,9 +17,8 @@ public class Busqueda implements Runnable{
 	private String puntuacion;
 	private Thread hilo;
 	private String link;
-	private List<Listado> listado = new ArrayList<Listado>();
-	private int continuar = 0;
-	boolean entrar = false;
+	protected int continuar = 0;
+	protected boolean entrar = false;
 	
 	public Busqueda(String inicio, String fin, String titulo, String url, String detalles, String imagen, String puntuacion){
 		c = new Conexion();
@@ -62,48 +54,23 @@ public class Busqueda implements Runnable{
 	public void buscarTodo(String url){
 		boolean entrar = true;
 		
-		for(int i = 0; entrar && i < 8; i++) {
+		for(int i = 0; entrar && i < 12; i++) {
+			String url1 = getURL();
 			String img = getURLImagen();
-			String nombre = getTitulo(i);
+			String nombre = getTitulo();
 			if(nombre != "") {
-				
-				//listado.add(new Listado());
 				PanelManga.nuevoManga(i);
 				
 				PanelManga.setNombre(nombre, i);
 				//listado.get(i).setDetalleCorto(getDetalles(i));
-				//listado.get(i).setUrl(getURL(i));
+				PanelManga.setURL(url1, i);
 				PanelManga.setImage(getImagen(img), i);
-				
 				System.out.println(nombre);
 				
 			}else {
 				entrar = false;
 			}
 		}
-		
-		/*****************
-		String[] nombres = getTitulo();
-		String[] detalles = getDetalles();
-		String[] urls = getURL();
-		Image[] imagenes = getImagenes();
-		
-		Listado[] lista = new Listado[nombres.length];
-		
-		for(int i = 0; i < nombres.length; i++) {
-			lista[i] = new Listado();
-			lista[i].setTitulo(nombres[i]);
-			lista[i].setDetalleCorto(detalles[i]);
-			lista[i].setUrl(urls[i]);
-			lista[i].setImg(imagenes[i]);
-		}
-		
-		/*PanelView[] listado = new PanelView[nombres.length];
-		
-		for(int i = 0; i < nombres.length; i++){
-			listado[i] = new PanelView(modal, nombres[i], detalles[i], urls[i], imagenes[i]);
-			listado[i].getString();
-		}*/
 		
 	}
 	
@@ -121,7 +88,7 @@ public class Busqueda implements Runnable{
 	 * *****************************
 	 */
 	
-	public String getTitulo(int index){
+	public String getTitulo(){
 		
 		String lineas = buscarLinea(this.titulo, inicio, fin, 1);
 		String contenido = extraerTexto(ValuesStrings.NADA, lineas, titulo, 0);
@@ -129,7 +96,7 @@ public class Busqueda implements Runnable{
 		return contenido;
 	}
 	
-	public String getURL(int index){
+	public String getURL(){
 		
 		String lineas = buscarLinea(url, inicio, fin, 0);
 		String contenido = extraerTexto(ValuesStrings.COMILLAS, lineas, "href", 0);
@@ -137,7 +104,7 @@ public class Busqueda implements Runnable{
 		return contenido;
 	}
 	
-	public String getDetalles(int index){
+	public String getDetalles(){
 		
 		String lineas = buscarLinea(detalles, inicio, fin, 1);
 		String contenido = extraerTexto(ValuesStrings.NADA, lineas, detalles, 0);
@@ -145,7 +112,7 @@ public class Busqueda implements Runnable{
 		return contenido;
 	}
 	
-	public String getPuntuacion(int index) {
+	public String getPuntuacion() {
 		
 		String lineas = buscarLinea(this.puntuacion, inicio, fin, 0);
 		String contenido = extraerTexto(ValuesStrings.ETIQUETAS, lineas, puntuacion, 0);
@@ -156,7 +123,7 @@ public class Busqueda implements Runnable{
 	private Image getImagen(String lineas){
 		String contenido = extraerTexto(ValuesStrings.COMILLAS, lineas, imagen, 0);
 		
-		Image imagenes = c.descargar(contenido);
+		Image imagenes = c.descargar(contenido, "Manga");
 		
 		return imagenes;
 		
@@ -224,14 +191,6 @@ public class Busqueda implements Runnable{
 		}
 		return lista;
 	}
-	
-	/*protected String[] listAString(List<String> lista){
-		String[] str = new String[lista.size()];
-		for(int i = 0; i < lista.size(); i++){
-			str[i] = lista.get(i);
-		}
-		return str;
-	}*/
 	
 	
 	protected String extraerTexto(String texto, String linea, String ref, int index) {

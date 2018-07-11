@@ -4,7 +4,6 @@ import java.net.URL;
 import javax.imageio.ImageIO;
 import javax.swing.JLabel;
 
-import gui.Descargas;
 import gui.ProgressBar;
 import recursos.Fichero;
 
@@ -12,7 +11,6 @@ import java.net.HttpURLConnection;
 import java.io.InputStream;
 import java.io.BufferedReader;
 import java.io.File;
-import java.nio.file.Files;
 import java.io.InputStreamReader;
 import java.io.IOException;
 import java.util.List;
@@ -80,11 +78,11 @@ public class Conexion {
 	      return codigoFuente;
 	   }
 	
-	public Image descargar(String direccion){
+	public Image descargar(String direccion, String tipo){
 		   
 		//Image[] imagenes = new Image[direccion.length];
 		Image imagen = null;
-		String cache = "cache";
+		String cache = "cache/" + tipo;
 		String path = cache + "/" + Fichero.extraerNombre(direccion);
 		boolean existe = false;
 		
@@ -111,13 +109,12 @@ public class Conexion {
 				imagen = ImageIO.read(is);
 				
 				Fichero.guardarImagen((BufferedImage) imagen, "jpg", path);
-				
 				System.out.println(direccion);
 				
 			}catch (SocketTimeoutException e) {
 				e.printStackTrace();
 				System.out.println("Ocurrio una error en la descarga, por favor, vuelva a intentarlo.");
-				descargar(direccion);
+				descargar(direccion, tipo);
 			}catch (MalformedURLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

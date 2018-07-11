@@ -4,12 +4,10 @@ import javax.swing.JFrame;
 import javax.swing.JDialog;
 import javax.swing.ImageIcon;
 import java.awt.Image;
-import java.awt.ScrollPane;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.List;
 
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -18,18 +16,14 @@ import javax.swing.JButton;
 import javax.swing.JTextField;
 import javax.swing.JScrollPane;
 
-import algoritmos.Busqueda;
 import algoritmos.BusquedaContenidoManga;
-import algoritmos.FormatText;
-import recursos.Listado;
-import recursos.Listado.Aux;
+import gui.PanelView.Aux;
 import values.ValuesStrings;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.GridLayout;
 
 import javax.swing.border.BevelBorder;
 import javax.swing.border.SoftBevelBorder;
@@ -56,7 +50,6 @@ public class JDialogContenido extends JDialog implements MouseListener, ActionLi
 	private JTextField textInicio;
 	private JTextField textFin;
 	private JList<Aux> jLista;
-	private Listado lista;
 	private Dimension sizeImage = new Dimension(300, 500);
 	private RenderLista render = new RenderLista();
 	private int inicio, fin;
@@ -64,13 +57,14 @@ public class JDialogContenido extends JDialog implements MouseListener, ActionLi
 	private BusquedaContenidoManga b;
 	private ProgressBar progresoPrincipal;
 	private ProgressBar progresoSecundario;
+	private PanelView lista;
 	
 	/**
 	 * Constructor 
 	 * @param modal: Ventana;
 	 * @param lista: Lista de capitulos y mangas;
 	 */
-	public JDialogContenido (JFrame modal, Listado lista, String titulo){
+	public JDialogContenido (JFrame modal, PanelView lista, String titulo){
 		super(modal, true);
 		this.lista = lista;
 		this.titulo = titulo;
@@ -78,8 +72,11 @@ public class JDialogContenido extends JDialog implements MouseListener, ActionLi
 		setTitle("OtakuWord - Mangas - " + titulo);
 		
 		//Paneles
+		
 		panelIzquierda();
+
 		panelCentral(ValuesStrings.LEO_MANGA+lista.getUrl());
+
 		panelAbajo();
 		
 		//Propiedades de visivilidad
@@ -106,7 +103,7 @@ public class JDialogContenido extends JDialog implements MouseListener, ActionLi
 		
 		//<<INICIO>> de la descripcion del manga
 		b = new BusquedaContenidoManga();
-		lista = b.BuscarContenido(url, lista);
+		b.BuscarContenido(url, lista);
 		
 		String detalle = lista.getDetalle();
 		
@@ -114,7 +111,6 @@ public class JDialogContenido extends JDialog implements MouseListener, ActionLi
 		detalles.setPreferredSize(new Dimension(600,220));
 		panelDetalle.add(detalles);
 		//<<FIN>> de la descripcion del manga
-		
 		panelDescarga.setBorder(new SoftBevelBorder(BevelBorder.LOWERED));
 		
 		desInicio = new JButton("Desde: ");
