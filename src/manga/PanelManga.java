@@ -58,6 +58,13 @@ public class PanelManga extends JPanel{
 		comp.add(lista.get(index));
 	}
 	
+	public static void borrarMangas() {
+		comp.removeAll();
+		lista = null;
+		lista = new ArrayList<PanelView>();
+		actualizar();
+	}
+	
 	//
 	//	Seters and getters
 	//
@@ -83,7 +90,6 @@ public class PanelManga extends JPanel{
 		comp.updateUI();
 	}
 	
-//	Falta arreglar el bug para cuando tenemos menos de 6 elemenatos
 	protected static void size(JFrame ventana) {
 		if(!lista.isEmpty()) {
 			int sizeX = -6;
