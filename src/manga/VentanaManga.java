@@ -5,11 +5,16 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
+
+import algoritmos.BuscarManga;
+
 import javax.swing.JLabel;
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -17,7 +22,7 @@ import javax.swing.JPanel;
 import gui.Descargas;
 import kSwing.KJFrame;
 
-public class VentanaManga extends KJFrame implements ComponentListener{
+public class VentanaManga extends KJFrame implements ComponentListener, ActionListener{
 
 	/**
 	 * 
@@ -66,11 +71,9 @@ public class VentanaManga extends KJFrame implements ComponentListener{
 	private void norte() {
 		labelBusqueda = new JLabel("Buscar: ");
 		textBusqueda = new JTextField();
+		textBusqueda.addActionListener(this);
 		buttonBusqueda = new JButton("Buscar");
-		/*panelNort.setLayout(new FlowLayout(FlowLayout.RIGHT));
-		panelNort.add(labelBusqueda);
-		panelNort.add(textBusqueda);
-		panelNort.add(buttonBusqueda);*/
+		buttonBusqueda.addActionListener(this);
 		panelNort.setLayout(new BorderLayout(10,5));
 		panelNort.setBorder(new EmptyBorder(10,10,10,10));
 		panelNort.add(labelBusqueda, BorderLayout.WEST);
@@ -116,6 +119,20 @@ public class VentanaManga extends KJFrame implements ComponentListener{
 	public void componentShown(ComponentEvent arg0) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 */
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
+		// TODO Auto-generated method stub
+		//http://leomanga.com/buscar?s=trinity+seven
+		PanelManga.borrarMangas();
+		BuscarManga buscar = new BuscarManga(); 
+		buscar.actualizarCodigo2(textBusqueda.getText());
+		buscar.busqueda();
 	}
 	
 }
