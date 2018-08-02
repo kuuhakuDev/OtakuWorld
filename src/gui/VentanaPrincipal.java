@@ -66,7 +66,7 @@ public class VentanaPrincipal extends KJFrame implements ActionListener{
 		noticias = new JButton("Noticias");
 		noticias.setPreferredSize(size);
 		noticias.addActionListener(this);
-		//noticias.setEnabled(false);
+		noticias.setEnabled(false);
 		
 		panelCentral = new JPanel(new FlowLayout(FlowLayout.CENTER, 100, 30));
 		panelCentral.add(anime);
