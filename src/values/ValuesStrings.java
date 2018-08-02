@@ -24,6 +24,7 @@ public class ValuesStrings {
 	
 	//*************************Busqueda**********************************
 	public static final String COMILLAS = "comillas";
+	public static final String COMILLAS_SIMPLES = "comillas_simples";
 	public static final String ETIQUETAS = "etiquetas";
 	public static final String NADA = "nada";
 
