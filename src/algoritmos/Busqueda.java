@@ -41,7 +41,6 @@ public class Busqueda implements Runnable{
 	}
 	
 	public Busqueda() {
-		
 	}
 	
 	public void buscarLista(String url) {
@@ -54,7 +53,7 @@ public class Busqueda implements Runnable{
 	public void buscarTodo(String url){
 		boolean entrar = true;
 		
-		for(int i = 0; entrar && i < 12; i++) {
+		for(int i = 0; entrar; i++) {
 			String url1 = getURL();
 			String img = getURLImagen();
 			String nombre = getTitulo();
@@ -71,7 +70,6 @@ public class Busqueda implements Runnable{
 				entrar = false;
 			}
 		}
-		
 	}
 	
 	public void actualizarCodigo(String url){
@@ -157,7 +155,6 @@ public class Busqueda implements Runnable{
 				}
 			}	
 		}
-		
 		return linea;
 	}
 	
@@ -176,6 +173,22 @@ public class Busqueda implements Runnable{
 		}
 		return lista;
 	}
+	
+	//Extraer codigo entre comillas simples.
+		public String comillasSimples(String param, String ref, int index){
+			String lista = "";
+			int x = 0;
+			
+			for(int j = param.indexOf(ref, index); j < param.length() && x !=2; j++){
+				if(param.charAt(j) == '\''){
+					x++;
+				}
+				else if(x == 1){
+					lista += param.charAt(j);
+				}
+			}
+			return lista;
+		}
 	
 	//Extraer codigo entre etiquetas.
 	public String etiquetas(String param, String ref, int index){
@@ -199,6 +212,9 @@ public class Busqueda implements Runnable{
 		}
 		else if(texto.equals(ValuesStrings.ETIQUETAS)) {
 			return etiquetas(linea, ref, index);
+		}
+		else if(texto.equals(ValuesStrings.COMILLAS_SIMPLES)){
+			return comillasSimples(linea, ref, index);
 		}
 		else {
 			return linea;
